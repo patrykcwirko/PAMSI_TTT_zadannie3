@@ -1,6 +1,6 @@
 #pragma once
 
-#define ILOSCWRZEDZIE 3
+#define DFLT_ILOSC_W_RZEDZIE 3
 
 class Ustawienia 
 {
@@ -9,7 +9,9 @@ private:
 	
 public:
 
-	Ustawienia() : iloscWRzedzie(ILOSCWRZEDZIE) {}
+	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
+
+	Ustawienia(int ilosc) : iloscWRzedzie(ilosc) {}
 
 	~Ustawienia() {}
 
