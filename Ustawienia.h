@@ -1,34 +1,37 @@
 #pragma once
 
+#include <memory>
+
 #define DFLT_ILOSC_W_RZEDZIE 3
 
-class Ustawienia 
+
+class CUstawienia 
 {
 private:
 	int iloscWRzedzie;
 	
 public:
 
-	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
+	CUstawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
 
-	Ustawienia(int ilosc) : iloscWRzedzie(ilosc) {}
+	CUstawienia(int ilosc) : iloscWRzedzie(ilosc) {}
 
-	~Ustawienia() {}
+	virtual ~CUstawienia() {}
 
 	int ilosc();
 
 	void ilosc(int ilosc);
 };
 
-int Ustawienia::ilosc() 
+int CUstawienia::ilosc() 
 { 
 	return iloscWRzedzie; 
 }
 
-void Ustawienia::ilosc(int ilosc) 
+void CUstawienia::ilosc(int ilosc) 
 { 
 	this->iloscWRzedzie = ilosc; 
 }
 
-typedef std::shared_ptr<Ustawienia> Ustawienia_Ptr;
+typedef std::shared_ptr< CUstawienia > CUstawienia_Ptr;
 //std::shared_ptr<Ustawienia> p = std::make_shared<Ustawienia>();

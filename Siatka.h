@@ -4,90 +4,93 @@
 #include "Ustawienia.h"
 
 template <class T>
-using Matrix = std::vector<std::vector<T>>;
+using CMatrix = std::vector<std::vector<T>>;
 
 template <class T>
-using Matrix_Ptr = std::shared_ptr<Matrix<T> >;
+using CMatrix_Ptr = std::shared_ptr<CMatrix<T> >;
 
 template <class T>
-class Siatka
+class CSiatka
 {
 private:
-	Ustawienia_Ptr ustawienia;
-	Matrix_Ptr<T> siatka;
+	CUstawienia_Ptr ustawienia;
+	CMatrix_Ptr<T> siatka;
 
 public:
-	Siatka();
+	CSiatka();
 
-	Siatka(Ustawienia_Ptr ustawienia);
+	CSiatka(CUstawienia_Ptr ustawienia);
 
-	void ustaw(Ustawienia_Ptr ustawienia);
+	void ustaw(CUstawienia_Ptr ustawienia);
+
+	void ustaw(int iloscWRzedzie);
 
 	T get( size_t kolumna, size_t wiersz);
 
 	void set(size_t kolumna, size_t wiersz, T wartosc);
 
-	virtual ~Siatka();
+	virtual ~CSiatka();
 
 private:
 	void wyczyscSiatke();
 };
 
 template <class T>
-Siatka<T>::Siatka() : ustawienia(nullptr), siatka(nullptr)
+CSiatka<T>::CSiatka() : ustawienia(nullptr), siatka(nullptr)
 {
-	this->ustawienia = std::make_shared<Ustawienia>();
-	this->siatka = std::make_shared< Matrix<T> >();
+	this->ustawienia = std::make_shared<CUstawienia>();
+	this->siatka = std::make_shared< CMatrix<T> >();
 }
 
 template <class T>
-Siatka<T>::Siatka(Ustawienia_Ptr ustawienia) : ustawienia(nullptr), siatka(nullptr)
+CSiatka<T>::CSiatka(CUstawienia_Ptr ustawienia) : ustawienia(nullptr), siatka(nullptr)
 {
-	this->ustawinia = ustawienia;
-	this->siatka = make_shared< Matrix<T> >();
+	this->ustawienia = ustawienia;
+	this->siatka = make_shared< CMatrix<T> >();
 }
 
 template <class T>
-Siatka<T>::~Siatka()
+void CSiatka<T>::ustaw(int iloscWRzedzie)
+{
+	this->ustawienia = std::make_shared<CUstawienia>(iloscWRzedzie);
+	this->siatka = std::make_shared< CMatrix<T> >();
+}
+
+template <class T>
+CSiatka<T>::~CSiatka()
 {
 }
 
 template <class T>
-void Siatka<T>::ustaw(Ustawienia_Ptr ustawienia)
+void CSiatka<T>::ustaw(CUstawienia_Ptr ustawienia)
 {
-	this->ustawinia = ustawienia;
+	this->ustawienia = ustawienia;
 	if (this->siatka != nullptr)
 	{
 		wyczyscSiatke();
 	}
-	this->siatka = make_shared< Matrix<T> >();
+	this->siatka = make_shared< CMatrix<T> >();
 }
 
 
 template <class T>
-T Siatka<T>::get(size_t kolumna, size_t wiersz)
+T CSiatka<T>::get(size_t kolumna, size_t wiersz)
 {
 	return this->siatka[kolumna][wiersz];
 }
 
 
 template <class T>
-void Siatka<T>::set(size_t kolumna, size_t wiersz, T wartosc)
+void CSiatka<T>::set(size_t kolumna, size_t wiersz, T wartosc)
 {
 	this->siatka[kolumna][wiersz] = wartosc;
 }
 
 template <class T>
-void Siatka<T>::wyczyscSiatke()
-{
-	vector< vector<T> >::iterator row;
-	vector<T>::iterator col;
-	for (row = this->siatka.begin(); row != this->siatka.end(); row++) {
-		for (col = row->begin(); col != row->end(); col++) {
-			*col = NULL;
-		}
-	}
+void CSiatka<T>::wyczyscSiatke()
+{	
+
 }
 
 template <class T>
-using Siatka_Ptr = std::shared_ptr<Siatka<T> >;
+using Siatka_Ptr = std::shared_ptr<CSiatka<T> >;

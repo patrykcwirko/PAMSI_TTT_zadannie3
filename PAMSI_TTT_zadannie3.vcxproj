@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Narzedzia.h" />
     <ClInclude Include="Siatka.h" />
     <ClInclude Include="Ustawienia.h" />
     <ClInclude Include="PAMSI_TTT_zadannie3.h" />
