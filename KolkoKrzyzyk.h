@@ -10,7 +10,8 @@ enum EKIK
 	G2Wygrywa,     //2
 	G1Ruch,        //3
 	G2Ruch,		   //4
-	Remis	       //5
+	Remis,	       //5
+	Gramy		   //6
 };
 
 enum EKratka 
@@ -28,6 +29,7 @@ class KolkoKrzyzyk
 {
 private:
 	int wielkosc;
+	bool ruchG1;
 	Matrix_Ptr matrix;
 	Ustawienia_Ptr ustawienia;
 
@@ -41,6 +43,9 @@ public:
 	bool ustaw(int kratka);
 	EKratka pobierz(int kratka);
 	void reset();
+	EKIK status();
+	bool czyRuchKomp();
+	void wykonjaRuchKomp();
 };
 
 typedef std::shared_ptr< KolkoKrzyzyk > KolkoKrzyzyk_Ptr;

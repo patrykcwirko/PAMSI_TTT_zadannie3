@@ -6,6 +6,7 @@
 
 #define ZMNIEJSZENIE 0.8
 
+typedef std::shared_ptr< std::string > String_Ptr;
 
 class Siatka
 {
@@ -28,7 +29,13 @@ public:
 
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
 
+	String_Ptr podajKtoWygral(KolkoKrzyzyk_Ptr ptrKik);
+
+	void zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM LParam);
+
 };
+
+typedef std::shared_ptr<Siatka> Siatka_Ptr;
 
 Siatka::Siatka() : ustawienia(nullptr)
 {
@@ -136,5 +143,45 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 	DeleteObject(Pen2);
 }
 
-using Siatka_Ptr = std::shared_ptr<Siatka>;
+String_Ptr Siatka::podajKtoWygral(KolkoKrzyzyk_Ptr ptrKik)
+{
+	std::string wygral;
+	if (ptrKik->status() == G1Wygrywa)
+	{
+		wygral = "X wygral.";
+	}
+	if (ptrKik->status() == G2Wygrywa)
+	{
+		wygral = "O wygral.";
+	}
+	if (ptrKik->status() == Remis)
+	{
+		wygral = "Remis";
+	}
+	return std::make_shared<std::string>( wygral);
+}
+
+void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
+{
+	int x = 0, y = 0;
+	int dlKratki = (int)(TDLUGOSC / ustawienia->ilosc());
+	for (x = 0; x < this->ustawienia->ilosc(); x++)
+	{
+		for (y = 0; y < this->ustawienia->ilosc(); y++)
+		{
+			if (LOWORD(lParam) >= y * dlKratki && LOWORD(lParam) < (y * dlKratki) + dlKratki)
+			{
+				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
+				{
+					int kratka = y + (x * this->ustawienia->ilosc());
+					if (ptrKik->ustaw(kratka) == false) { continue; }
+					if (ptrKik->czyRuchKomp() )
+					{
+						ptrKik->wykonjaRuchKomp();
+					}
+				}
+			}
+		}
+	}
+}
 
