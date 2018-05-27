@@ -19,8 +19,8 @@ private:
 	Ustawienia_Ptr ustawienia;
 	Matrix_Ptr<T> siatka;
 	void narysujSiatke(HDC DC);
-	void narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush ,short a, short b);
-	void narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, short a, short b);
+	void narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush ,int a, int b);
+	void narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int a, int b);
 
 public:
 	Siatka();
@@ -112,14 +112,14 @@ void Siatka<T>::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 	Brush = CreateSolidBrush(RGB(255, 255, 255));
 	MBrush = HBRUSH(SelectObject(DC, Brush));
 	narysujSiatke(DC);
-	short x= 0, y = 0;
+	int x= 0, y = 0;
 	int iloscKratek = this->ustawienia->ilosc() *  this->ustawienia->ilosc();
-	for (short i = 0; i<iloscKratek; i++)
+	for (int i = 0; i<iloscKratek; i++)
 	{
 		x = i / this->ustawienia->ilosc();
 		y = i - (x* this->ustawienia->ilosc() );
-		x *= (short)(TDLUGOSC / ustawienia->ilosc());
-		y *= (short)(TDLUGOSC / ustawienia->ilosc());
+		x *= (int)(TDLUGOSC / ustawienia->ilosc());
+		y *= (int)(TDLUGOSC / ustawienia->ilosc());
 		if (ptrKik->pobierz(i) == XZnak)
 		{
 			narysujKrzyzyk(DC, Brush, MBrush, x, y);
@@ -138,8 +138,8 @@ void Siatka<T>::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 template <class T>
 void Siatka<T>::narysujSiatke(HDC DC)
 {
-	short x = 0, y = 0;
-	short dlKratki = (short)(TDLUGOSC / ustawienia->ilosc());
+	int x = 0, y = 0;
+	int dlKratki = (int)(TDLUGOSC / ustawienia->ilosc());
 	for (x = 0; x < this->ustawienia->ilosc(); x++)
 	{
 		for (y = 0; y < this->ustawienia->ilosc(); y++)
@@ -150,7 +150,7 @@ void Siatka<T>::narysujSiatke(HDC DC)
 }
 
 template <class T>
-void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, short x, short y)
+void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 {
 	DeleteObject(Brush);
 	DeleteObject(MBrush);
@@ -158,9 +158,9 @@ void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, short x, sho
 	MBrush = HBRUSH(SelectObject(DC, Brush));
 	HPEN Pen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 	HPEN Pen2 = HPEN(SelectObject(DC, Pen));
-	short dlKratki = (short)(TDLUGOSC / ustawienia->ilosc());
-	short margines = (short)(0.1 * dlKratki);
-	short dlZnaku = dlKratki - 2 * margines;
+	int dlKratki = (int)(TDLUGOSC / ustawienia->ilosc());
+	int margines = (int)(0.1 * dlKratki);
+	int dlZnaku = dlKratki - 2 * margines;
 	MoveToEx(DC, y + margines, x + margines, NULL);
 	LineTo(DC, y + dlZnaku, x + dlZnaku);
 	MoveToEx(DC, y + margines, x + dlZnaku, NULL);
@@ -170,7 +170,7 @@ void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, short x, sho
 }
 
 template <class T>
-void Siatka<T>::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, short x, short y)
+void Siatka<T>::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 {
 	HPEN Pen = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
 	HPEN Pen2 = HPEN(SelectObject(DC, Pen));
@@ -178,9 +178,9 @@ void Siatka<T>::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, short x, short
 	DeleteObject(MBrush);
 	Brush = CreateSolidBrush(RGB(255, 255, 255));
 	MBrush = HBRUSH(SelectObject(DC, Brush));
-	short dlKratki = (short)(TDLUGOSC / ustawienia->ilosc());
-	short margines = (short)(0.1 * dlKratki);
-	short dlZnaku = dlKratki - 2 * margines;
+	int dlKratki = (int)(TDLUGOSC / ustawienia->ilosc());
+	int margines = (int)(0.1 * dlKratki);
+	int dlZnaku = dlKratki - 2 * margines;
 	Ellipse(DC, y + margines, x + margines, y + dlZnaku, x + dlZnaku);
 	DeleteObject(Pen);
 	DeleteObject(Pen2);

@@ -23,8 +23,8 @@ class KolkoKrzyzyk
 public:
 	KolkoKrzyzyk();
 	virtual ~KolkoKrzyzyk();
-	bool ustaw(short kratka);
-	EKratka pobierz(short kratka);
+	bool ustaw(int kratka);
+	EKratka pobierz(int kratka);
 	void reset();
 };
 

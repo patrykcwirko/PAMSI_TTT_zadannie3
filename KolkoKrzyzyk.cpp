@@ -11,12 +11,12 @@ KolkoKrzyzyk::~KolkoKrzyzyk()
 {
 }
 
-bool KolkoKrzyzyk::ustaw(short kratka)
+bool KolkoKrzyzyk::ustaw(int kratka)
 {
 	return false;
 }
 
-EKratka KolkoKrzyzyk::pobierz(short kratka)
+EKratka KolkoKrzyzyk::pobierz(int kratka)
 {
 	return OZnak;
 }
