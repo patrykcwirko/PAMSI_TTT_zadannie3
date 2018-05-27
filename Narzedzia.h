@@ -57,4 +57,9 @@ void RedirectIOToConsole() {
 
 }
 
+void printLog(std::string info)
+{
+	cout << info << endl;
+}
+
 #endif //NARZEDZIA_H

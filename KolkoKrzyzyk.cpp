@@ -37,8 +37,20 @@ EKratka KolkoKrzyzyk::pobierz(int kratka)
 
 void KolkoKrzyzyk::reset()
 {
-	//TODO
-	this->matrix = std::make_shared< Matrix >();
+	//for(std::vector<EKratka> wek : this->matrix)
+	//{
+	//	wek.clear();
+	//}
+	//for (std::vector<EKratka>::iterator it = myvector.begin(); it != myvector.end(); ++it)
+	//	std::cout << ' ' << *it;
+
+	std::vector< std::vector<EKratka> >::iterator row;
+	std::vector<EKratka>::iterator col;
+	for (row = matrix->begin(); row != matrix->end(); row++) {
+		for (col = row->begin(); col != row->end(); col++) {
+			*col = Pusta;
+		}
+	}
 }
 
 EKratka KolkoKrzyzyk::get(size_t kolumna, size_t wiersz)
