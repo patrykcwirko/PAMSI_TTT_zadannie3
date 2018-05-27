@@ -3,6 +3,7 @@
 #include <vector>
 #include "Ustawienia.h"
 
+
 template <class T>
 using Matrix = std::vector<std::vector<T>>;
 
@@ -106,11 +107,12 @@ void Siatka<T>::narysuj(HWND *Window)
 	Brush = CreateSolidBrush(RGB(255, 255, 255));
 	MBrush = HBRUSH(SelectObject(DC, Brush));
 	short a = 0, b = 0;
+	short dlKratki = (short)(TDLUGOSC/ustawienia->ilosc());
 	for (a = 0; a < this->ustawienia->ilosc(); a++)
 	{
 		for (b = 0; b < this->ustawienia->ilosc(); b++)
 		{
-			Rectangle(DC, b * 10, a * 10, (b * 10) + 10, (a * 10) + 10);
+			Rectangle(DC, b * dlKratki, a * dlKratki, (b * dlKratki) + dlKratki, (a * dlKratki) + dlKratki);
 		}
 	}
 }

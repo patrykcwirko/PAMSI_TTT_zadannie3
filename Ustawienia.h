@@ -5,7 +5,8 @@
 #include <memory>
 
 #define DFLT_ILOSC_W_RZEDZIE 5
-
+#define TDLUGOSC 406
+#define TWYSOKOSC 445
 
 class Ustawienia
 {
