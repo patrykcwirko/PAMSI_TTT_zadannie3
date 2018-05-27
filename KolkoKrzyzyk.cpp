@@ -3,16 +3,16 @@
 #include "Ustawienia.h"
 
 
-KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), siatka(nullptr), ustawienia(nullptr)
+KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), matrix(nullptr), ustawienia(nullptr)
 {
-	this->siatka = std::make_shared< Matrix >();
+	this->matrix = std::make_shared< Matrix >();
 }
 
-KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : wielkosc(DFLT_ILOSC_W_RZEDZIE), siatka(nullptr), ustawienia(nullptr)
+KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : wielkosc(DFLT_ILOSC_W_RZEDZIE), matrix(nullptr), ustawienia(nullptr)
 {
 	this->wielkosc = ustawienia->ilosc();
 	this->ustawienia = ustawienia;
-	this->siatka = std::make_shared< Matrix >();
+	this->matrix = std::make_shared< Matrix >();
 }
 
 KolkoKrzyzyk::~KolkoKrzyzyk()
@@ -38,15 +38,15 @@ EKratka KolkoKrzyzyk::pobierz(int kratka)
 void KolkoKrzyzyk::reset()
 {
 	//TODO
-	this->siatka = std::make_shared< Matrix >();
+	this->matrix = std::make_shared< Matrix >();
 }
 
 EKratka KolkoKrzyzyk::get(size_t kolumna, size_t wiersz)
 {
-	return this->siatka->at(kolumna).at(wiersz);
+	return this->matrix->at(kolumna).at(wiersz);
 }
 
 void KolkoKrzyzyk::set(size_t kolumna, size_t wiersz, EKratka wartosc)
 {
-	this->siatka->at(kolumna).at(wiersz) = wartosc;
+	this->matrix->at(kolumna).at(wiersz) = wartosc;
 }

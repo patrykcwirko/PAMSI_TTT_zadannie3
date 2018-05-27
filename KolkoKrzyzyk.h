@@ -28,7 +28,7 @@ class KolkoKrzyzyk
 {
 private:
 	int wielkosc;
-	Matrix_Ptr siatka;
+	Matrix_Ptr matrix;
 	Ustawienia_Ptr ustawienia;
 
 public:
