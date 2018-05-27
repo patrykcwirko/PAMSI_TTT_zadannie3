@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+#include "Ustawienia.h"
 
 enum EKIK 
 {
@@ -18,11 +20,24 @@ enum EKratka
 	OZnak
 };
 
+typedef std::vector<std::vector<EKratka>> Matrix;
+
+typedef std::shared_ptr<Matrix> Matrix_Ptr;
+
 class KolkoKrzyzyk
 {
+private:
+	int wielkosc;
+	Matrix_Ptr siatka;
+	Ustawienia_Ptr ustawienia;
+
 public:
 	KolkoKrzyzyk();
+	KolkoKrzyzyk(Ustawienia_Ptr ustawienia);
 	virtual ~KolkoKrzyzyk();
+	void ustawWielkosc(int wielkosc);
+	EKratka get(size_t kolumna, size_t wiersz);
+	void set(size_t kolumna, size_t wiersz, EKratka wartosc);
 	bool ustaw(int kratka);
 	EKratka pobierz(int kratka);
 	void reset();

@@ -1,6 +1,6 @@
-//#pragma once
-#ifndef USTAWIENIA_H
-#define USTAWIENIA_H
+#pragma once
+//#ifndef USTAWIENIA_H
+//#define USTAWIENIA_H
 
 #include <memory>
 
@@ -23,20 +23,10 @@ public:
 
 	int ilosc();
 
-	void ilosc(int ilosc);
 };
 
-int Ustawienia::ilosc()
-{
-	return iloscWRzedzie;
-}
-
-void Ustawienia::ilosc(int ilosc)
-{
-	this->iloscWRzedzie = ilosc;
-}
 
 typedef std::shared_ptr< Ustawienia > Ustawienia_Ptr;
 //std::shared_ptr<Ustawienia> p = std::make_shared<Ustawienia>();
 
-#endif //USTAWIENIA_H
+//#endif //USTAWIENIA_H

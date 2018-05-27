@@ -53,6 +53,9 @@
     <ClCompile Include="Siatka.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Ustawienia.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PAMSI_TTT_zadannie3.rc">

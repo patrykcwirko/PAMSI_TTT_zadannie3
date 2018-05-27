@@ -6,18 +6,11 @@
 
 #define ZMNIEJSZENIE 0.8
 
-template <class T>
-using Matrix = std::vector<std::vector<T>>;
 
-template <class T>
-using Matrix_Ptr = std::shared_ptr<Matrix<T> >;
-
-template <class T>
 class Siatka
 {
 private:
 	Ustawienia_Ptr ustawienia;
-	Matrix_Ptr<T> siatka;
 	void narysujSiatke(HDC DC);
 	void narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush ,int a, int b);
 	void narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int a, int b);
@@ -29,79 +22,39 @@ public:
 
 	virtual ~Siatka();
 
-	void ustaw(Ustawienia_Ptr ustawienia);
+	void ustawParametry(Ustawienia_Ptr ustawienia);
 
-	void ustaw(int iloscWRzedzie);
-
-	T get(size_t kolumna, size_t wiersz);
-
-	void set(size_t kolumna, size_t wiersz, T wartosc);
+	void ustawWielkosc(int iloscWRzedzie);
 
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
 
-private:
-	void wyczyscSiatke();
 };
 
-template <class T>
-Siatka<T>::Siatka() : ustawienia(nullptr), siatka(nullptr)
+Siatka::Siatka() : ustawienia(nullptr)
 {
 	this->ustawienia = std::make_shared<Ustawienia>();
-	this->siatka = std::make_shared< Matrix<T> >();
 }
 
-template <class T>
-Siatka<T>::Siatka(Ustawienia_Ptr ustawienia) : ustawienia(nullptr), siatka(nullptr)
+Siatka::Siatka(Ustawienia_Ptr ustawienia) : ustawienia(nullptr)
 {
 	this->ustawienia = ustawienia;
-	this->siatka = make_shared< Matrix<T> >();
 }
 
-template <class T>
-void Siatka<T>::ustaw(int iloscWRzedzie)
+void Siatka::ustawWielkosc(int iloscWRzedzie)
 {
 	this->ustawienia = std::make_shared<Ustawienia>(iloscWRzedzie);
-	this->siatka = std::make_shared< Matrix<T> >();
 }
 
-template <class T>
-Siatka<T>::~Siatka()
+Siatka::~Siatka()
 {
 }
 
-template <class T>
-void Siatka<T>::ustaw(Ustawienia_Ptr ustawienia)
+void Siatka::ustawParametry(Ustawienia_Ptr ustawienia)
 {
 	this->ustawienia = ustawienia;
-	if (this->siatka != nullptr)
-	{
-		wyczyscSiatke();
-	}
-	this->siatka = make_shared< Matrix<T> >();
 }
 
-
-template <class T>
-T Siatka<T>::get(size_t kolumna, size_t wiersz)
-{
-	return this->siatka[kolumna][wiersz];
-}
-
-
-template <class T>
-void Siatka<T>::set(size_t kolumna, size_t wiersz, T wartosc)
-{
-	this->siatka[kolumna][wiersz] = wartosc;
-}
-
-template <class T>
-void Siatka<T>::wyczyscSiatke()
-{
-
-}
-
-template <class T>
-void Siatka<T>::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
+void Siatka::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 {
 	PAINTSTRUCT ps;
 	HBRUSH MBrush;
@@ -135,8 +88,7 @@ void Siatka<T>::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 	DeleteObject(MBrush);
 }
 
-template <class T>
-void Siatka<T>::narysujSiatke(HDC DC)
+void Siatka::narysujSiatke(HDC DC)
 {
 	int x = 0, y = 0;
 	int dlKratki = (int)(TDLUGOSC / ustawienia->ilosc());
@@ -149,8 +101,7 @@ void Siatka<T>::narysujSiatke(HDC DC)
 	}
 }
 
-template <class T>
-void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
+void Siatka::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 {
 	DeleteObject(Brush);
 	DeleteObject(MBrush);
@@ -169,8 +120,7 @@ void Siatka<T>::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y
 	DeleteObject(Pen2);
 }
 
-template <class T>
-void Siatka<T>::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
+void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 {
 	HPEN Pen = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
 	HPEN Pen2 = HPEN(SelectObject(DC, Pen));
@@ -186,6 +136,5 @@ void Siatka<T>::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 	DeleteObject(Pen2);
 }
 
-template <class T>
-using Siatka_Ptr = std::shared_ptr<Siatka<T> >;
+using Siatka_Ptr = std::shared_ptr<Siatka>;
 
