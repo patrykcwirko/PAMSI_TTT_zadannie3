@@ -20,3 +20,8 @@ EKratka KolkoKrzyzyk::pobierz(short kratka)
 {
 	return OZnak;
 }
+
+void KolkoKrzyzyk::reset()
+{
+
+}

@@ -25,6 +25,7 @@ public:
 	virtual ~KolkoKrzyzyk();
 	bool ustaw(short kratka);
 	EKratka pobierz(short kratka);
+	void reset();
 };
 
 typedef std::shared_ptr< KolkoKrzyzyk > KolkoKrzyzyk_Ptr;
