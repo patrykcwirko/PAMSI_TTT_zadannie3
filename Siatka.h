@@ -1,4 +1,7 @@
-#pragma once
+//#pragma once
+#ifndef SIATKA_H
+#define SIATKA_H
+
 #include <memory>
 #include <vector>
 #include "Ustawienia.h"
@@ -21,15 +24,17 @@ public:
 
 	CSiatka(CUstawienia_Ptr ustawienia);
 
+	virtual ~CSiatka();
+
 	void ustaw(CUstawienia_Ptr ustawienia);
 
 	void ustaw(int iloscWRzedzie);
 
-	T get( size_t kolumna, size_t wiersz);
+	T get(size_t kolumna, size_t wiersz);
 
 	void set(size_t kolumna, size_t wiersz, T wartosc);
 
-	virtual ~CSiatka();
+	void narysuj(HWND *Window);
 
 private:
 	void wyczyscSiatke();
@@ -88,9 +93,32 @@ void CSiatka<T>::set(size_t kolumna, size_t wiersz, T wartosc)
 
 template <class T>
 void CSiatka<T>::wyczyscSiatke()
-{	
+{
 
 }
 
 template <class T>
+void CSiatka<T>::narysuj(HWND *Window)
+{
+	PAINTSTRUCT ps;
+	HBRUSH MBrush;
+	HBRUSH Brush = 0;
+	HDC DC;
+	InvalidateRect(*Window, NULL, true);
+	DC = BeginPaint(*Window, &ps);
+	Brush = CreateSolidBrush(RGB(255, 255, 255));
+	MBrush = HBRUSH(SelectObject(DC, Brush));
+	short a = 0, b = 0;
+	for (a = 0; a < 3; a++)
+	{
+		for (b = 0; b < 3; b++)
+		{
+			Rectangle(DC, b * 100, a * 100, (b * 100) + 100, (a * 100) + 100);
+		}
+	}
+}
+
+template <class T>
 using Siatka_Ptr = std::shared_ptr<CSiatka<T> >;
+
+#endif //SIATKA_H

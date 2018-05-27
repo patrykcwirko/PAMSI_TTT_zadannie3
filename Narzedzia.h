@@ -1,10 +1,14 @@
-#pragma once
+//#pragma once
+#ifndef NARZEDZIA_H
+#define NARZEDZIA_H
+
 #include <windows.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <io.h>
 #include <iostream>
 #include <fstream>
+
 
 using namespace std;
 
@@ -52,3 +56,5 @@ void RedirectIOToConsole() {
 	std::cin.clear();
 
 }
+
+#endif //NARZEDZIA_H
