@@ -4,38 +4,38 @@
 
 #include <memory>
 
-#define DFLT_ILOSC_W_RZEDZIE 3
+#define DFLT_ILOSC_W_RZEDZIE 5
 
 
-class CUstawienia
+class Ustawienia
 {
 private:
 	int iloscWRzedzie;
 
 public:
 
-	CUstawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
+	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
 
-	CUstawienia(int ilosc) : iloscWRzedzie(ilosc) {}
+	Ustawienia(int ilosc) : iloscWRzedzie(ilosc) {}
 
-	virtual ~CUstawienia() {}
+	virtual ~Ustawienia() {}
 
 	int ilosc();
 
 	void ilosc(int ilosc);
 };
 
-int CUstawienia::ilosc()
+int Ustawienia::ilosc()
 {
 	return iloscWRzedzie;
 }
 
-void CUstawienia::ilosc(int ilosc)
+void Ustawienia::ilosc(int ilosc)
 {
 	this->iloscWRzedzie = ilosc;
 }
 
-typedef std::shared_ptr< CUstawienia > CUstawienia_Ptr;
+typedef std::shared_ptr< Ustawienia > Ustawienia_Ptr;
 //std::shared_ptr<Ustawienia> p = std::make_shared<Ustawienia>();
 
 #endif //USTAWIENIA_H

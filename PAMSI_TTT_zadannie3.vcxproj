@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="KolkoKrzyzyk.h" />
     <ClInclude Include="Narzedzia.h" />
     <ClInclude Include="Siatka.h" />
     <ClInclude Include="Ustawienia.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="KolkoKrzyzyk.cpp" />
     <ClCompile Include="PAMSI_TTT_zadannie3.cpp" />
     <ClCompile Include="Siatka.cpp" />
     <ClCompile Include="stdafx.cpp">
