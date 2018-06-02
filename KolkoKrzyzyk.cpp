@@ -2,6 +2,20 @@
 #include "KolkoKrzyzyk.h"
 #include "Ustawienia.h"
 
+std::string kratkaNaString(EKratka znak)
+{
+	switch (znak)
+	{
+	case Pusta:
+		return "_";
+	case XZnak:
+		return "X";
+	case OZnak:
+		return "O";
+	default:
+		return " ";
+	}
+}
 
 KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
 {
@@ -32,6 +46,8 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 	if (kratka <0 || kratka >ilKratek-1) { return false; }
 	int y = kratka / this->ustawienia->ilosc();
 	int x = kratka - (y * this->ustawienia->ilosc());
+	std::string ctr1 = kratkaNaString(Pusta);
+	std::string ctr2 = kratkaNaString(this->matrix->at(y).at(x));
 	if (this->matrix->at(y).at(x) != Pusta )
 	{
 		return false;
