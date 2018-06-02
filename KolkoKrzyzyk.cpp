@@ -24,7 +24,7 @@ KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(true), mat
 
 KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
 {
-	this->wielkosc = ustawienia->ilosc();
+	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
 	this->ustawienia = ustawienia;
 	this->matrix = std::make_shared< Matrix >();
 	this->init();
@@ -42,10 +42,10 @@ void KolkoKrzyzyk::ustawWielkosc(int wielkosc)
 
 bool KolkoKrzyzyk::ustawKratke(int kratka)
 {
-	int ilKratek = this->ustawienia->ilosc() * this->ustawienia->ilosc();
+	int ilKratek = this->ustawienia->pobierzIloscWRzedzie() * this->ustawienia->pobierzIloscWRzedzie();
 	if (kratka <0 || kratka >ilKratek-1) { return false; }
-	int y = kratka / this->ustawienia->ilosc();
-	int x = kratka - (y * this->ustawienia->ilosc());
+	int y = kratka / this->ustawienia->pobierzIloscWRzedzie();
+	int x = kratka - (y * this->ustawienia->pobierzIloscWRzedzie());
 	std::string ctr1 = kratkaNaString(Pusta);
 	std::string ctr2 = kratkaNaString(this->matrix->at(y).at(x));
 	Narzedzia::printLog("\n" + std::to_string(x) + "," + std::to_string(y) + ":" + ctr2 + "\n");
@@ -69,8 +69,8 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 
 EKratka KolkoKrzyzyk::pobierz(int kratka)
 {
-	int x = kratka / this->ustawienia->ilosc();
-	int y = kratka - (x* this->ustawienia->ilosc());
+	int x = kratka / this->ustawienia->pobierzIloscWRzedzie();
+	int y = kratka - (x* this->ustawienia->pobierzIloscWRzedzie());
 	return pobierz(x, y);
 }
 
@@ -89,10 +89,10 @@ void KolkoKrzyzyk::init()
 	}
 	matrix->clear();
 
-	for (int i = 0; i<ustawienia->ilosc(); i++)
+	for (int i = 0; i<ustawienia->pobierzIloscWRzedzie(); i++)
 	{
 		std::vector <EKratka> row;
-		for (int j = 0; j<ustawienia->ilosc(); j++)
+		for (int j = 0; j<ustawienia->pobierzIloscWRzedzie(); j++)
 		{
 			row.push_back(Pusta);
 		}

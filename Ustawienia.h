@@ -10,16 +10,23 @@ class Ustawienia
 {
 private:
 	int iloscWRzedzie;
+	bool zaczynaCzlowiek;
 
 public:
 
-	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE) {}
+	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE), zaczynaCzlowiek(true) {}
 
-	Ustawienia(int ilosc) : iloscWRzedzie(ilosc) {}
+	Ustawienia(int ilosc) : iloscWRzedzie(ilosc), zaczynaCzlowiek(true) {}
 
 	virtual ~Ustawienia() {}
 
-	int ilosc();
+	int pobierzIloscWRzedzie();
+
+	void ustawIloscWRzedzie(int ilosc);
+
+	bool czyZaczynaCzlowiek();
+
+	void ustawCzyZaczynaCzlowiek(bool ruch);
 
 };
 
