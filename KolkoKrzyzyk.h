@@ -42,6 +42,7 @@ public:
 	void set(size_t kolumna, size_t wiersz, EKratka wartosc);
 	bool ustawKratke(int kratka);
 	EKratka pobierz(int kratka);
+	EKratka pobierz(int x, int y);
 	void init();
 	EKIK status();
 	bool czyRuchKomp();

@@ -52,7 +52,14 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 
 EKratka KolkoKrzyzyk::pobierz(int kratka)
 {
-	return Pusta;
+	int x = kratka / this->ustawienia->ilosc();
+	int y = kratka - (x* this->ustawienia->ilosc());
+	return pobierz(x, y);
+}
+
+EKratka KolkoKrzyzyk::pobierz(int x, int y) 
+{
+	return this->matrix->at(y).at(x);
 }
 
 void KolkoKrzyzyk::init()
