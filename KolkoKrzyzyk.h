@@ -39,8 +39,6 @@ public:
 	KolkoKrzyzyk(Ustawienia_Ptr ustawienia);
 	virtual ~KolkoKrzyzyk();
 	void ustawWielkosc(int wielkosc);
-	EKratka get(size_t kolumna, size_t wiersz);
-	void set(size_t kolumna, size_t wiersz, EKratka wartosc);
 	bool ustawKratke(int kratka);
 	EKratka pobierz(int kratka);
 	EKratka pobierz(int x, int y);

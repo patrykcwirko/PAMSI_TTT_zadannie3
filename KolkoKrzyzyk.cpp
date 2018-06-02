@@ -17,7 +17,7 @@ std::string kratkaNaString(EKratka znak)
 	}
 }
 
-KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
+KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(true), matrix(nullptr), ustawienia(nullptr)
 {
 	this->matrix = std::make_shared< Matrix >();
 }
@@ -100,19 +100,13 @@ void KolkoKrzyzyk::init()
 	}
 }
 
-EKratka KolkoKrzyzyk::get(size_t kolumna, size_t wiersz)
-{
-	return this->matrix->at(kolumna).at(wiersz);
-}
-
-void KolkoKrzyzyk::set(size_t kolumna, size_t wiersz, EKratka wartosc)
-{
-	this->matrix->at(kolumna).at(wiersz) = wartosc;
-}
-
 EKIK KolkoKrzyzyk::status()
 {
-	return G1Ruch;
+	if (ruchG1)
+	{
+		return G1Ruch;
+	}
+	return G2Ruch;
 }
 
 bool KolkoKrzyzyk::czyRuchKomp()
