@@ -29,8 +29,6 @@ public:
 
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
 
-	String_Ptr podajKtoWygral(KolkoKrzyzyk_Ptr ptrKik);
-
 	void zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM LParam);
 
 };
@@ -143,23 +141,6 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 	DeleteObject(Pen2);
 }
 
-String_Ptr Siatka::podajKtoWygral(KolkoKrzyzyk_Ptr ptrKik)
-{
-	std::string wygral;
-	if (ptrKik->status() == G1Wygrywa)
-	{
-		wygral = "X wygral.";
-	}
-	if (ptrKik->status() == G2Wygrywa)
-	{
-		wygral = "O wygral.";
-	}
-	if (ptrKik->status() == Remis)
-	{
-		wygral = "Remis";
-	}
-	return std::make_shared<std::string>( wygral);
-}
 
 void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
 {
@@ -174,7 +155,7 @@ void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
 				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
 				{
 					int kratka = y + (x * this->ustawienia->ilosc());
-					if (ptrKik->ustaw(kratka) == false) { continue; }
+					if (ptrKik->ustawKratke(kratka) == false) { continue; }
 					if (ptrKik->czyRuchKomp() )
 					{
 						ptrKik->wykonjaRuchKomp();

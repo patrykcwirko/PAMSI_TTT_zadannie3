@@ -40,9 +40,9 @@ public:
 	void ustawWielkosc(int wielkosc);
 	EKratka get(size_t kolumna, size_t wiersz);
 	void set(size_t kolumna, size_t wiersz, EKratka wartosc);
-	bool ustaw(int kratka);
+	bool ustawKratke(int kratka);
 	EKratka pobierz(int kratka);
-	void reset();
+	void init();
 	EKIK status();
 	bool czyRuchKomp();
 	void wykonjaRuchKomp();
