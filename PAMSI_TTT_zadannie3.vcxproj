@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KolkoKrzyzyk.cpp" />
+    <ClCompile Include="Narzedzia.cpp" />
     <ClCompile Include="PAMSI_TTT_zadannie3.cpp" />
     <ClCompile Include="Siatka.cpp" />
     <ClCompile Include="stdafx.cpp">

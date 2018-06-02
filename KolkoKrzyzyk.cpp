@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "KolkoKrzyzyk.h"
-#include "Ustawienia.h"
+#include "Narzedzia.h"
 
 std::string kratkaNaString(EKratka znak)
 {
@@ -48,6 +48,7 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 	int x = kratka - (y * this->ustawienia->ilosc());
 	std::string ctr1 = kratkaNaString(Pusta);
 	std::string ctr2 = kratkaNaString(this->matrix->at(y).at(x));
+	Narzedzia::printLog("\n" + std::to_string(x) + "," + std::to_string(y) + ":" + ctr2 + "\n");
 	if (this->matrix->at(y).at(x) != Pusta )
 	{
 		return false;
@@ -111,7 +112,7 @@ void KolkoKrzyzyk::set(size_t kolumna, size_t wiersz, EKratka wartosc)
 
 EKIK KolkoKrzyzyk::status()
 {
-	return Gramy;
+	return G1Ruch;
 }
 
 bool KolkoKrzyzyk::czyRuchKomp()
