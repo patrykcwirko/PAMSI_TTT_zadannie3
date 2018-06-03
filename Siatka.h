@@ -5,6 +5,7 @@
 #include "Ustawienia.h"
 #include "KolkoKrzyzyk.h"
 #include "Narzedzia.h"
+#include "Typy.h"
 
 #define ZMNIEJSZENIE 0.8
 

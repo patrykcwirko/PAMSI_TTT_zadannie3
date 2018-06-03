@@ -17,12 +17,15 @@ std::string kratkaNaString(EKratka znak)
 	}
 }
 
-KolkoKrzyzyk::KolkoKrzyzyk() : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(true), matrix(nullptr), ustawienia(nullptr)
+KolkoKrzyzyk::KolkoKrzyzyk() : 
+	wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(true), matrix(nullptr), ustawienia(nullptr)
 {
 	this->matrix = std::make_shared< Matrix >();
+	this->init();
 }
 
-KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
+KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : 
+	wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
 {
 	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
 	this->ustawienia = ustawienia;
@@ -32,6 +35,13 @@ KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : wielkosc(DFLT_ILOSC_W_RZ
 
 KolkoKrzyzyk::~KolkoKrzyzyk()
 {
+}
+
+void KolkoKrzyzyk::ustawParametry(Ustawienia_Ptr ustawienia)
+{
+	this->ustawienia = ustawienia;
+	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
+	this->init();
 }
 
 void KolkoKrzyzyk::ustawWielkosc(int wielkosc)
@@ -116,5 +126,5 @@ bool KolkoKrzyzyk::czyRuchKomp()
 
 void KolkoKrzyzyk::wykonjaRuchKomp()
 {
-
+	
 }

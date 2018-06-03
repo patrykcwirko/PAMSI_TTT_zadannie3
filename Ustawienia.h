@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include "Narzedzia.h"
+#include "Typy.h"
 
 #define DFLT_ILOSC_W_RZEDZIE 5
 #define TDLUGOSC 406
@@ -10,24 +13,22 @@ class Ustawienia
 {
 private:
 	int iloscWRzedzie;
-	bool zaczynaCzlowiek;
+	bool zaczynaKomputer;
+	bool wygranaGdyPiec;
 
 public:
 
-	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE), zaczynaCzlowiek(true) {}
-
-	Ustawienia(int ilosc) : iloscWRzedzie(ilosc), zaczynaCzlowiek(true) {}
+	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE), zaczynaKomputer(false), wygranaGdyPiec(false) { }
+	Ustawienia(int ilosc) : iloscWRzedzie(ilosc), zaczynaKomputer(false), wygranaGdyPiec(false) { }
 
 	virtual ~Ustawienia() {}
-
 	int pobierzIloscWRzedzie();
-
 	void ustawIloscWRzedzie(int ilosc);
-
-	bool czyZaczynaCzlowiek();
-
-	void ustawCzyZaczynaCzlowiek(bool ruch);
-
+	bool czyZaczynaKomputer();
+	void ustawZaczynaKomputer(bool czyKomputer);
+	bool czyWygranaGdyPiec();
+	void ustawWygranaGdyPiec(bool czyPiecToWygrana);
+	String_Ptr info();
 };
 
 
