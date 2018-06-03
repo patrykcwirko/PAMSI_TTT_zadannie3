@@ -93,9 +93,11 @@ void KolkoKrzyzyk::init()
 {
 	std::vector< std::vector<EKratka> >::iterator row;
 	std::vector<EKratka>::iterator col;
-	for(row = matrix->end(); row != matrix->begin(); row--)
+	for(row = matrix->begin(); row != matrix->end(); row++)
 	{
-		row->clear();
+		if (!row->empty()) {
+			row->clear();
+		}
 	}
 	matrix->clear();
 
