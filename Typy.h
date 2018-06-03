@@ -9,17 +9,17 @@ typedef std::shared_ptr< std::string > String_Ptr;
 
 enum EKIK
 {
-	G1Wygrywa = 1, //1 
-	G2Wygrywa,     //2
-	G1Ruch,        //3
-	G2Ruch,		   //4
-	Remis,	       //5
-	Gramy		   //6
+	GraczWygrywa = 1,		//1 
+	KomputerWygrywa,		//2
+	RuchGracza,				//3
+	RuchKomputera,			//4
+	Remis,					//5
+	Gramy					//6
 };
 
 enum EKratka
 {
-	Pusta,
+	Pusta = 100,
 	XZnak,
 	OZnak
 };

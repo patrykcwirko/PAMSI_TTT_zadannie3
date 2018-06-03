@@ -3,17 +3,18 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include "Typy.h"
 #include "Ustawienia.h"
 #include "Minmax.h"
-#include "Typy.h"
 
 class KolkoKrzyzyk
 {
 private:
 	int wielkosc;
-	bool ruchG1;
+	bool terazRuchGracza;
 	Matrix_Ptr matrix;
 	Ustawienia_Ptr ustawienia;
+	MinMax_Ptr minmax;
 
 public:
 	KolkoKrzyzyk();
@@ -27,7 +28,7 @@ public:
 	void init();
 	EKIK status();
 	bool czyRuchKomp();
-	void wykonjaRuchKomp();
+	int wykonjaRuchKomp();
 };
 
 typedef std::shared_ptr< KolkoKrzyzyk > KolkoKrzyzyk_Ptr;

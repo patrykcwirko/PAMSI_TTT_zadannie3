@@ -18,17 +18,21 @@ std::string kratkaNaString(EKratka znak)
 }
 
 KolkoKrzyzyk::KolkoKrzyzyk() : 
-	wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(true), matrix(nullptr), ustawienia(nullptr)
+	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(true), matrix(nullptr), ustawienia(nullptr), minmax(nullptr)
 {
+	this->minmax = std::make_shared< MinMax >();
+	this->ustawienia = std::make_shared< Ustawienia >();
+	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
 	this->matrix = std::make_shared< Matrix >();
 	this->init();
 }
 
 KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : 
-	wielkosc(DFLT_ILOSC_W_RZEDZIE), ruchG1(false), matrix(nullptr), ustawienia(nullptr)
+	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(false), matrix(nullptr), ustawienia(nullptr), minmax(nullptr)
 {
-	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
+	this->minmax = std::make_shared< MinMax >();
 	this->ustawienia = ustawienia;
+	this->wielkosc = ustawienia->pobierzIloscWRzedzie();
 	this->matrix = std::make_shared< Matrix >();
 	this->init();
 }
@@ -58,21 +62,21 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 	int x = kratka - (y * this->ustawienia->pobierzIloscWRzedzie());
 	std::string ctr1 = kratkaNaString(Pusta);
 	std::string ctr2 = kratkaNaString(this->matrix->at(y).at(x));
-	Narzedzia::printLog("\n" + std::to_string(x) + "," + std::to_string(y) + ":" + ctr2 + "\n");
+	Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) + ":" + ctr2);
 	if (this->matrix->at(y).at(x) != Pusta )
 	{
 		return false;
 	}
-	if (this->status() == G1Ruch) 
+	if (this->status() == RuchGracza) 
 	{
 		this->matrix->at(y).at(x) = XZnak;
-		ruchG1 = false;
+		terazRuchGracza = false;
 		return true;
 	}
-	if (this->status() == G2Ruch)
+	if (this->status() == RuchKomputera)
 	{
 		this->matrix->at(y).at(x) = OZnak;
-		ruchG1 = true;
+		terazRuchGracza = true;
 	}
 	return true;
 }
@@ -114,11 +118,11 @@ void KolkoKrzyzyk::init()
 
 EKIK KolkoKrzyzyk::status()
 {
-	if (ruchG1)
+	if (terazRuchGracza)
 	{
-		return G1Ruch;
+		return RuchGracza;
 	}
-	return G2Ruch;
+	return RuchKomputera;
 }
 
 bool KolkoKrzyzyk::czyRuchKomp()
@@ -126,7 +130,7 @@ bool KolkoKrzyzyk::czyRuchKomp()
 	return false;
 }
 
-void KolkoKrzyzyk::wykonjaRuchKomp()
+int KolkoKrzyzyk::wykonjaRuchKomp()
 {
-	
+	return this->minmax->nalepszyRuch(this->matrix);
 }

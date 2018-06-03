@@ -121,12 +121,14 @@ void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
 			{
 				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
 				{
-					Narzedzia::printLog("\n" + std::to_string(x) + "," + std::to_string(y) + "\n");
+					Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) );
 					int kratka = x + (y * this->ustawienia->pobierzIloscWRzedzie());
 					if (ptrKik->ustawKratke(kratka) == false) { continue; }
 					if (ptrKik->czyRuchKomp())
 					{
-						ptrKik->wykonjaRuchKomp();
+						//
+						int najlepszyRuch = ptrKik->wykonjaRuchKomp();
+						ptrKik->ustawKratke(najlepszyRuch);
 					}
 				}
 			}
