@@ -8,6 +8,8 @@
 #include <fstream>
 #include <string>
 
+#include "Typy.h"
+
 // maximum mumber of lines the output console should have
 static const WORD MAX_CONSOLE_LINES = 500;
 
@@ -18,5 +20,6 @@ public:
 	virtual ~Narzedzia();
 	static void RedirectIOToConsole();
 	static void printLog(std::string info);
+	static std::string kratkaNaString(EKratka znak);
 };
 

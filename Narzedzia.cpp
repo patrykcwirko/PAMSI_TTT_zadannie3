@@ -58,3 +58,18 @@ void Narzedzia::printLog(std::string info)
 {
 	cout << info << endl;
 }
+
+std::string Narzedzia::kratkaNaString(EKratka znak)
+{
+	switch (znak)
+	{
+	case Pusta:
+		return "_";
+	case XZnak:
+		return "X";
+	case OZnak:
+		return "O";
+	default:
+		return " ";
+	}
+}

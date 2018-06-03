@@ -2,21 +2,6 @@
 #include "KolkoKrzyzyk.h"
 #include "Narzedzia.h"
 
-std::string kratkaNaString(EKratka znak)
-{
-	switch (znak)
-	{
-	case Pusta:
-		return "_";
-	case XZnak:
-		return "X";
-	case OZnak:
-		return "O";
-	default:
-		return " ";
-	}
-}
-
 KolkoKrzyzyk::KolkoKrzyzyk() : 
 	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(true), matrix(nullptr), ustawienia(nullptr), minmax(nullptr)
 {
@@ -28,7 +13,7 @@ KolkoKrzyzyk::KolkoKrzyzyk() :
 }
 
 KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : 
-	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(false), matrix(nullptr), ustawienia(nullptr), minmax(nullptr)
+	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(true), matrix(nullptr), ustawienia(nullptr), minmax(nullptr)
 {
 	this->minmax = std::make_shared< MinMax >();
 	this->ustawienia = ustawienia;
@@ -60,8 +45,8 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 	if (kratka <0 || kratka >ilKratek-1) { return false; }
 	int y = kratka / this->ustawienia->pobierzIloscWRzedzie();
 	int x = kratka - (y * this->ustawienia->pobierzIloscWRzedzie());
-	std::string ctr1 = kratkaNaString(Pusta);
-	std::string ctr2 = kratkaNaString(this->matrix->at(y).at(x));
+	std::string ctr1 = Narzedzia::kratkaNaString(Pusta);
+	std::string ctr2 = Narzedzia::kratkaNaString(this->matrix->at(y).at(x));
 	Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) + ":" + ctr2);
 	if (this->matrix->at(y).at(x) != Pusta )
 	{
@@ -125,12 +110,15 @@ EKIK KolkoKrzyzyk::status()
 	return RuchKomputera;
 }
 
-bool KolkoKrzyzyk::czyRuchKomp()
+bool KolkoKrzyzyk::czyTerazRuchGracza()
 {
-	return false;
+	return terazRuchGracza;
 }
 
-int KolkoKrzyzyk::wykonjaRuchKomp()
+void KolkoKrzyzyk::wykonajRuchKomp()
 {
-	return this->minmax->nalepszyRuch(this->matrix);
+	terazRuchGracza = false;
+	int najlepszyRuch = this->minmax->nalepszyRuch(this->matrix, ustawienia->pobierzIloscWRzedzie());
+	ustawKratke(najlepszyRuch);
+	terazRuchGracza = true;
 }

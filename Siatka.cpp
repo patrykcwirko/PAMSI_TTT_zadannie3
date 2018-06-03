@@ -109,8 +109,9 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 }
 
 
-void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
+int Siatka::wyliczKratke(LPARAM lParam)
 {
+	int kratka = NIEPOPRAWNA_KRATKA;
 	int x = 0, y = 0;
 	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
 	for (x = 0; x < this->ustawienia->pobierzIloscWRzedzie(); x++)
@@ -122,14 +123,8 @@ void Siatka::zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM lParam)
 				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
 				{
 					Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) );
-					int kratka = x + (y * this->ustawienia->pobierzIloscWRzedzie());
-					if (ptrKik->ustawKratke(kratka) == false) { continue; }
-					if (ptrKik->czyRuchKomp())
-					{
-						//
-						int najlepszyRuch = ptrKik->wykonjaRuchKomp();
-						ptrKik->ustawKratke(najlepszyRuch);
-					}
+					kratka = x + (y * this->ustawienia->pobierzIloscWRzedzie());
+					return kratka;
 				}
 			}
 		}

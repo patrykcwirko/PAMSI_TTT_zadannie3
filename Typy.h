@@ -24,6 +24,8 @@ enum EKratka
 	OZnak
 };
 
+#define NIEPOPRAWNA_KRATKA		-1
+
 struct Move
 {
 	int row, col;

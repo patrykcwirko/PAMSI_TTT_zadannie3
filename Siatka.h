@@ -32,7 +32,7 @@ public:
 
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
 
-	void zaznaczKlikniecie(KolkoKrzyzyk_Ptr ptrKik, LPARAM LParam);
+	int wyliczKratke(LPARAM LParam);
 
 };
 

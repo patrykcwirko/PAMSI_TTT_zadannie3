@@ -27,8 +27,8 @@ public:
 	EKratka pobierz(int x, int y);
 	void init();
 	EKIK status();
-	bool czyRuchKomp();
-	int wykonjaRuchKomp();
+	bool czyTerazRuchGracza();
+	void wykonajRuchKomp();
 };
 
 typedef std::shared_ptr< KolkoKrzyzyk > KolkoKrzyzyk_Ptr;
