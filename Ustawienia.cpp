@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "Ustawienia.h"
 
-int Ustawienia::pobierzIloscWRzedzie()
+int Ustawienia::pobierzRozmiarSiatki()
 {
-	return iloscWRzedzie;
+	return rozmiarSiatki;
 }
 
-void Ustawienia::ustawIloscWRzedzie(int ilosc)
+void Ustawienia::ustawRozmiarSiatki(int rozmiar)
 {
-	this->iloscWRzedzie = ilosc;
+	this->rozmiarSiatki = rozmiar;
 }
 
 bool Ustawienia::czyZaczynaKomputer()
@@ -35,7 +35,7 @@ String_Ptr Ustawienia::info()
 {
 	std::string txt;
 	txt.append("Ustawienia => ilosc: ");
-	txt.append(std::to_string(iloscWRzedzie));
+	txt.append(std::to_string(rozmiarSiatki));
 	txt.append(", zaczynaKomputer: ");
 	txt.append(std::to_string(zaczynaKomputer));
 	txt.append(",  wygranaGdyPiec: ");

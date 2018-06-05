@@ -12,9 +12,9 @@ Siatka::Siatka(Ustawienia_Ptr ustawienia) : ustawienia(nullptr)
 	this->ustawienia = ustawienia;
 }
 
-void Siatka::ustawWielkosc(int iloscWRzedzie)
+void Siatka::ustawWielkosc(int rozmiarSiatki)
 {
-	this->ustawienia = std::make_shared<Ustawienia>(iloscWRzedzie);
+	this->ustawienia = std::make_shared<Ustawienia>(rozmiarSiatki);
 }
 
 Siatka::~Siatka()
@@ -38,13 +38,13 @@ void Siatka::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 	MBrush = HBRUSH(SelectObject(DC, Brush));
 	narysujSiatke(DC);
 	int x = 0, y = 0;
-	int iloscKratek = this->ustawienia->pobierzIloscWRzedzie() *  this->ustawienia->pobierzIloscWRzedzie();
+	int iloscKratek = this->ustawienia->pobierzRozmiarSiatki() *  this->ustawienia->pobierzRozmiarSiatki();
 	for (int i = 0; i<iloscKratek; i++)
 	{
-		x = i / this->ustawienia->pobierzIloscWRzedzie();
-		y = i - (x* this->ustawienia->pobierzIloscWRzedzie());
-		x *= (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
-		y *= (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
+		x = i / this->ustawienia->pobierzRozmiarSiatki();
+		y = i - (x* this->ustawienia->pobierzRozmiarSiatki());
+		x *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
+		y *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 		if (ptrKik->pobierz(i) == XZnak)
 		{
 			narysujKrzyzyk(DC, Brush, MBrush, x, y);
@@ -63,10 +63,10 @@ void Siatka::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 void Siatka::narysujSiatke(HDC DC)
 {
 	int x = 0, y = 0;
-	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
-	for (x = 0; x < this->ustawienia->pobierzIloscWRzedzie(); x++)
+	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
+	for (x = 0; x < this->ustawienia->pobierzRozmiarSiatki(); x++)
 	{
-		for (y = 0; y < this->ustawienia->pobierzIloscWRzedzie(); y++)
+		for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)
 		{
 			Rectangle(DC, y * dlKratki, x * dlKratki, (y * dlKratki) + dlKratki, (x * dlKratki) + dlKratki);
 		}
@@ -81,7 +81,7 @@ void Siatka::narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 	MBrush = HBRUSH(SelectObject(DC, Brush));
 	HPEN Pen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 	HPEN Pen2 = HPEN(SelectObject(DC, Pen));
-	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
+	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 	int margines = (int)(0.1 * dlKratki);
 	int dlZnaku = dlKratki - 2 * margines;
 	MoveToEx(DC, y + margines, x + margines, NULL);
@@ -100,7 +100,7 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 	DeleteObject(MBrush);
 	Brush = CreateSolidBrush(RGB(255, 255, 255));
 	MBrush = HBRUSH(SelectObject(DC, Brush));
-	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
+	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 	int margines = (int)(0.1 * dlKratki);
 	int dlZnaku = dlKratki - 2 * margines;
 	Ellipse(DC, y + margines, x + margines, y + dlZnaku, x + dlZnaku);
@@ -113,20 +113,21 @@ int Siatka::wyliczKratke(LPARAM lParam)
 {
 	int kratka = NIEPOPRAWNA_KRATKA;
 	int x = 0, y = 0;
-	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzIloscWRzedzie());
-	for (x = 0; x < this->ustawienia->pobierzIloscWRzedzie(); x++)
+	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
+	for (x = 0; x < this->ustawienia->pobierzRozmiarSiatki(); x++)
 	{
-		for (y = 0; y < this->ustawienia->pobierzIloscWRzedzie(); y++)
+		for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)
 		{
 			if (LOWORD(lParam) >= y * dlKratki && LOWORD(lParam) < (y * dlKratki) + dlKratki)
 			{
 				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
 				{
 					Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) );
-					kratka = x + (y * this->ustawienia->pobierzIloscWRzedzie());
+					kratka = x + (y * this->ustawienia->pobierzRozmiarSiatki());
 					return kratka;
 				}
 			}
 		}
 	}
+	return kratka;
 }

@@ -3,9 +3,8 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <map>
 
-typedef std::shared_ptr< std::string > String_Ptr;
-//std::make_shared<string>("hello world");
 
 enum EKIK
 {
@@ -26,11 +25,23 @@ enum EKratka
 
 #define NIEPOPRAWNA_KRATKA		-1
 
-struct Move
+struct Pozycja
 {
-	int row, col;
+	int y, x;
 };
 
-typedef std::vector<std::vector<EKratka>> Matrix;
+typedef std::shared_ptr< std::string > String_Ptr;
 
-typedef std::shared_ptr<Matrix> Matrix_Ptr;
+typedef std::shared_ptr< Pozycja > Pozycja_Ptr;
+
+typedef std::vector<Pozycja> ListaPozycji;
+
+typedef std::shared_ptr< std::vector<Pozycja> > ListaPozycji_Ptr;
+
+typedef std::vector<std::vector<EKratka>> Tablica;
+
+typedef std::shared_ptr< std::vector<std::vector<EKratka> > > Tablica_Ptr;
+
+typedef std::shared_ptr< std::vector<int> > VectorInts_Ptr;
+
+typedef std::shared_ptr< std::map<int, int> > MapIntInt_ptr;

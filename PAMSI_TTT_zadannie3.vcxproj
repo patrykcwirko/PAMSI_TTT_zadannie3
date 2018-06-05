@@ -148,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="KolkoKrzyzyk.h" />
-    <ClInclude Include="MinMax.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Narzedzia.h" />
     <ClInclude Include="Siatka.h" />
     <ClInclude Include="Typy.h" />
@@ -160,7 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KolkoKrzyzyk.cpp" />
-    <ClCompile Include="MinMax.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Narzedzia.cpp" />
     <ClCompile Include="PAMSI_TTT_zadannie3.cpp" />
     <ClCompile Include="Siatka.cpp" />

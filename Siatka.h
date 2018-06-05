@@ -21,19 +21,12 @@ private:
 
 public:
 	Siatka();
-
 	Siatka(Ustawienia_Ptr ustawienia);
-
 	virtual ~Siatka();
-
 	void ustawParametry(Ustawienia_Ptr ustawienia);
-
-	void ustawWielkosc(int iloscWRzedzie);
-
+	void ustawWielkosc(int rozmiarSiatki);
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
-
 	int wyliczKratke(LPARAM LParam);
-
 };
 
 typedef std::shared_ptr<Siatka> Siatka_Ptr;

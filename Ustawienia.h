@@ -12,18 +12,18 @@
 class Ustawienia
 {
 private:
-	int iloscWRzedzie;
+	int rozmiarSiatki;
 	bool zaczynaKomputer;
 	bool wygranaGdyPiec;
 
 public:
 
-	Ustawienia() : iloscWRzedzie(DFLT_ILOSC_W_RZEDZIE), zaczynaKomputer(false), wygranaGdyPiec(false) { }
-	Ustawienia(int ilosc) : iloscWRzedzie(ilosc), zaczynaKomputer(false), wygranaGdyPiec(false) { }
+	Ustawienia() : rozmiarSiatki(DFLT_ILOSC_W_RZEDZIE), zaczynaKomputer(false), wygranaGdyPiec(false) { }
+	Ustawienia(int rozmiar) : rozmiarSiatki(rozmiar), zaczynaKomputer(false), wygranaGdyPiec(false) { }
 
 	virtual ~Ustawienia() {}
-	int pobierzIloscWRzedzie();
-	void ustawIloscWRzedzie(int ilosc);
+	int pobierzRozmiarSiatki();
+	void ustawRozmiarSiatki(int rozmiar);
 	bool czyZaczynaKomputer();
 	void ustawZaczynaKomputer(bool czyKomputer);
 	bool czyWygranaGdyPiec();
