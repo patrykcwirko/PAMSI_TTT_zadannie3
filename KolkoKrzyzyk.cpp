@@ -157,7 +157,7 @@ int KolkoKrzyzyk::algorytm()
 			this->matrix->ustaw(i, OZnak);
 			Matrix_Ptr tmpMatrix = std::make_shared<Matrix>(this->wielkosc);
 			tmpMatrix->init(this->matrix->pobierzDane());
-			int tempPunkty = alphaBeta(tmpMatrix, OZnak, true, ALFA, BETA);
+			int tempPunkty = -alphaBeta(tmpMatrix, OZnak, true, ALFA, BETA);
 			this->matrix->ustaw(i, Pusta);
 			if (tempPunkty > punkty)
 			{
@@ -178,7 +178,8 @@ int KolkoKrzyzyk::alphaBeta(Matrix_Ptr matrix, EKratka gracz, bool znaleziono, i
 		return (a > b) ? a : b;
 	}
 
-	for (int i = 0; i < this->wielkosc; ++i)
+	int ilosc = this->wielkosc * this->wielkosc;
+	for (int i = 0; i < ilosc; ++i)
 	{
 		if (this->matrix->pobierz(i) == Pusta)
 		{
