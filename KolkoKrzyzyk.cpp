@@ -17,7 +17,7 @@ KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) :
 {
 	this->ustawienia = ustawienia;
 	this->wielkosc = ustawienia->pobierzRozmiarSiatki();
-	this->matrix = std::make_shared< Matrix >();
+	this->matrix = std::make_shared< Matrix >(this->wielkosc);
 	this->init();
 }
 
@@ -46,8 +46,8 @@ bool KolkoKrzyzyk::ustawKratke(int kratka)
 {
 	int ilKratek = this->ustawienia->pobierzRozmiarSiatki() * this->ustawienia->pobierzRozmiarSiatki();
 	if (kratka <0 || kratka >ilKratek-1) { return false; }
-	int y = kratka / this->ustawienia->pobierzRozmiarSiatki();
-	int x = kratka - (y * this->ustawienia->pobierzRozmiarSiatki());
+	int x = kratka / this->ustawienia->pobierzRozmiarSiatki();
+	int y = kratka - (x * this->ustawienia->pobierzRozmiarSiatki());
 	//std::string ctr1 = Narzedzia::kratkaNaString(Pusta);
 	std::string ctr2 = Narzedzia::kratkaNaString(this->matrix->pobierz(x, y)); 
 	Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) + ":" + ctr2);
@@ -92,9 +92,8 @@ bool KolkoKrzyzyk::czyTerazRuchGracza()
 void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
 	terazRuchGracza = false;
-	KolkoKrzyzyk_Ptr ptrGra = std::make_shared<KolkoKrzyzyk>(*this);
-	int najlepszyRuch = this->nalepszyRuch(this->matrix, ustawienia->pobierzRozmiarSiatki(), kratka);
-	ustawKratke(najlepszyRuch);
+	//int najlepszyRuch = this->nalepszyRuch(this->matrix, ustawienia->pobierzRozmiarSiatki(), kratka);
+	//ustawKratke(najlepszyRuch);
 	terazRuchGracza = true;
 }
 
@@ -121,8 +120,8 @@ int KolkoKrzyzyk::nalepszyRuch(Matrix_Ptr matrix, int rozmiarSiatki, EKratka kra
 	this->wielkosc = rozmiarSiatki;
 	this->iloscElementow = rozmiarSiatki * rozmiarSiatki;
 
-	return algorytm();
-	//return testujRuchLosowo();
+	//return algorytm();
+	return testujRuchLosowo();
 }
 
 int KolkoKrzyzyk::testujRuchLosowo()

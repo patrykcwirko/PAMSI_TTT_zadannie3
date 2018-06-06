@@ -41,8 +41,8 @@ void Siatka::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 	int iloscKratek = this->ustawienia->pobierzRozmiarSiatki() *  this->ustawienia->pobierzRozmiarSiatki();
 	for (int i = 0; i<iloscKratek; i++)
 	{
-		x = i / this->ustawienia->pobierzRozmiarSiatki();
-		y = i - (x* this->ustawienia->pobierzRozmiarSiatki());
+		y = i / this->ustawienia->pobierzRozmiarSiatki();
+		x = i - (y* this->ustawienia->pobierzRozmiarSiatki());
 		x *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 		y *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 		if (ptrKik->pobierz(i) == XZnak)
@@ -112,18 +112,18 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 int Siatka::wyliczKratke(LPARAM lParam)
 {
 	int kratka = NIEPOPRAWNA_KRATKA;
-	int x = 0, y = 0;
+	int y = 0, x = 0;
 	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
-	for (x = 0; x < this->ustawienia->pobierzRozmiarSiatki(); x++)
+	for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)
 	{
-		for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)
+		for (x = 0; x < this->ustawienia->pobierzRozmiarSiatki(); x++)
 		{
-			if (LOWORD(lParam) >= y * dlKratki && LOWORD(lParam) < (y * dlKratki) + dlKratki)
+			if (LOWORD(lParam) >= x * dlKratki && LOWORD(lParam) < (x * dlKratki) + dlKratki)
 			{
-				if (HIWORD(lParam) >= (x * dlKratki) && HIWORD(lParam) <(x * dlKratki) + dlKratki)
+				if (HIWORD(lParam) >= (y * dlKratki) && HIWORD(lParam) <(y * dlKratki) + dlKratki)
 				{
 					Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) );
-					kratka = x + (y * this->ustawienia->pobierzRozmiarSiatki());
+					kratka = y + (x * this->ustawienia->pobierzRozmiarSiatki());
 					return kratka;
 				}
 			}

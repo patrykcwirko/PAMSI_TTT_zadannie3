@@ -30,8 +30,8 @@ public:
 
 	int indeks(int y, int x);
 	Pozycja_Ptr pozycja(int index);
-	bool czyWolne(Pozycja &poz);
 
+	bool czyWolne(Pozycja &poz);
 	bool czyKoniecGry();
 	bool czyRemis();
 	ListaPozycji_Ptr pobierzMozliweRuchy();

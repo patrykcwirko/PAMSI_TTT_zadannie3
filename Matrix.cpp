@@ -28,6 +28,30 @@ Matrix::~Matrix()
 {
 }
 
+void Matrix::init()
+{
+	std::vector< std::vector<EKratka> >::iterator row;
+	std::vector<EKratka>::iterator col;
+	for (row = this->data->begin(); row != this->data->end(); row++)
+	{
+		if (!row->empty())
+		{
+			row->clear();
+		}
+	}
+	this->data->clear();
+
+	for (int i = 0; i < this->rozmiar; i++)
+	{
+		std::vector <EKratka> row;
+		for (int j = 0; j < this->rozmiar; j++)
+		{
+			row.push_back(Pusta);
+		}
+		this->data->push_back(row);
+	}
+}
+
 EKratka Matrix::pobierz(int kratka)
 {
 	int x = kratka / this->rozmiar;
@@ -37,12 +61,13 @@ EKratka Matrix::pobierz(int kratka)
 
 EKratka Matrix::pobierz(int x, int y)
 {
+	//z kolumy i potem wiersza
 	return this->data->at(x).at(y);
 }
 
 bool Matrix::ustaw(int x, int y, EKratka kratka)
 {
-	if ((this->data->at(x).at(x) == Pusta)) 
+	if ((this->data->at(x).at(y) == Pusta)) 
 	{
 		this->data->at(x).at(y) = kratka;
 		return true;
@@ -56,7 +81,7 @@ bool Matrix::ustaw(int index, EKratka kratka)
 	return ustaw(poz->x, poz->y, kratka);
 }
 
-int Matrix::indeks(int y, int x)
+int Matrix::indeks(int x, int y)
 {
 	return (y * this->rozmiar + x);
 }
@@ -65,13 +90,13 @@ Pozycja_Ptr Matrix::pozycja(int index)
 {
 	int y = index / this->rozmiar;
 	int x = index - (y * this->rozmiar);
-	Pozycja p = { y, x };
+	Pozycja p = { x, y };
 	return std::make_shared<Pozycja>(p);
 }
 
 bool Matrix::czyWolne(Pozycja &poz)
 {
-	return (this->data->at(poz.y).at(poz.x) == Pusta);
+	return (this->data->at(poz.x).at(poz.y) == Pusta);
 }
 
 Matrix_Ptr Matrix::wykonajRuch(Pozycja &poz)
@@ -99,30 +124,6 @@ Matrix_Ptr Matrix::wykonajRuch(Pozycja &poz)
 		}
 	}
 	return temp;
-}
-
-void Matrix::init()
-{
-	std::vector< std::vector<EKratka> >::iterator row;
-	std::vector<EKratka>::iterator col;
-	for (row = this->data->begin(); row != this->data->end(); row++)
-	{
-		if (!row->empty()) 
-		{
-			row->clear();
-		}
-	}
-	this->data->clear();
-
-	for (int i = 0; i < this->rozmiar; i++)
-	{
-		std::vector <EKratka> row;
-		for (int j = 0; j < this->rozmiar; j++)
-		{
-			row.push_back(Pusta);
-		}
-		this->data->push_back(row);
-	}
 }
 
 ListaPozycji_Ptr Matrix::pobierzMozliweRuchy()
@@ -195,7 +196,7 @@ int Matrix::liczKolumnowo(int column, EKratka player)
 	for (int i = 0; i < this->rozmiar; i++)
 	{
 		Pozycja_Ptr poz = pozycja(i);
-		if (this->data->at(poz->y).at(poz->x) == player)
+		if (this->data->at(poz->x).at(poz->y) == player)
 		{
 			counter++;
 		}
