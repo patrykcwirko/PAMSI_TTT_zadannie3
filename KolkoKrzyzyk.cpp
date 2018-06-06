@@ -120,8 +120,10 @@ int KolkoKrzyzyk::nalepszyRuch(Matrix_Ptr matrix, int rozmiarSiatki, EKratka kra
 	this->wielkosc = rozmiarSiatki;
 	this->iloscElementow = rozmiarSiatki * rozmiarSiatki;
 
-	//return algorytm();
-	return testujRuchLosowo();
+	return algorytm();
+	//TEST 
+	// return testujRuchLosowo();
+
 }
 
 int KolkoKrzyzyk::testujRuchLosowo()
@@ -146,9 +148,9 @@ int KolkoKrzyzyk::testujRuchLosowo()
 int KolkoKrzyzyk::algorytm()
 {
 	int odpowiedz = NIEPOPRAWNA_KRATKA;
-	Pozycja poz;
+	Pozycja poz = {-1, -1};
 	tempMatrix = this->matrix; //TODO
-	alphaBeta(GLEBOKOSC, XZnak, this->matrix, ALFA, BETA, poz);
+	odpowiedz = alphaBeta(GLEBOKOSC, XZnak, this->matrix, ALFA, BETA, poz);
 	return odpowiedz;
 }
 
@@ -206,13 +208,24 @@ int KolkoKrzyzyk::alphaBeta(const int poziom, EKratka gracz, Matrix_Ptr gra, int
 
 void KolkoKrzyzyk::permutuj(std::vector<Pozycja>::iterator l, std::vector<Pozycja>::iterator r)
 {
-	ListaPozycji_Ptr dodatnie, ujemne, zero;
+	ListaPozycji_Ptr dodatnie = std::make_shared< ListaPozycji >();
+	ListaPozycji_Ptr ujemne = std::make_shared< ListaPozycji >();
+	ListaPozycji_Ptr zero = std::make_shared< ListaPozycji >();
+
 	for (std::vector<Pozycja>::iterator it = l; it != r; it++)
 	{
 		int punkty = pobierzPunkty(tempMatrix->wykonajRuch(*it));
-		if (punkty < 0) ujemne->push_back(*it);
-		else if (punkty == 0) zero->push_back(*it);
-		else dodatnie->push_back(*it);
+		if (punkty < 0)
+		{
+			ujemne->push_back(*it);
+		}
+		else if (punkty == 0)
+		{
+			zero->push_back(*it);
+		}
+		else {
+			dodatnie->push_back(*it);
+		}
 	}
 	std::random_shuffle(zero->begin(), zero->end());
 	std::sort(dodatnie->begin(), dodatnie->end(), doCompare(std::make_shared<KolkoKrzyzyk>(*this)));
@@ -222,15 +235,18 @@ void KolkoKrzyzyk::permutuj(std::vector<Pozycja>::iterator l, std::vector<Pozycj
 
 	while (!dodatnie->empty() || !zero->empty() || !ujemne->empty())
 	{
-		if (!dodatnie->empty()) {
+		if (!dodatnie->empty()) 
+		{
 			*(i++) = *(dodatnie->rbegin());
 			dodatnie->pop_back();
 		}
-		if (!zero->empty()) {
+		if (!zero->empty()) 
+		{
 			*(i++) = *(zero->rbegin());
 			zero->pop_back();
 		}
-		if (!ujemne->empty()) {
+		if (!ujemne->empty()) 
+		{
 			*(i++) = *(ujemne->rbegin());
 			ujemne->pop_back();
 		}
