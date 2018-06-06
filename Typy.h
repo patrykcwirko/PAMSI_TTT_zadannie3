@@ -38,6 +38,10 @@ typedef std::vector<Pozycja> ListaPozycji;
 
 typedef std::shared_ptr< std::vector<Pozycja> > ListaPozycji_Ptr;
 
+typedef std::vector<EKratka> ListaKratek;
+
+typedef std::shared_ptr< ListaKratek > ListaKratek_Ptr;
+
 typedef std::vector<std::vector<EKratka>> Tablica;
 
 typedef std::shared_ptr< std::vector<std::vector<EKratka> > > Tablica_Ptr;

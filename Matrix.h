@@ -19,10 +19,10 @@ private:
 public:
 	Matrix();
 	Matrix(int rozmiar);
-	Matrix(Tablica_Ptr data, int rozmiar);
 	virtual ~Matrix();
 
 	void init();
+	void init(ListaKratek_Ptr pozycje);
 	EKratka pobierz(int x, int y);
 	EKratka pobierz(int index);
 	bool ustaw(int x, int y, EKratka kratka);
@@ -35,6 +35,7 @@ public:
 	bool czyKoniecGry();
 	bool czyRemis();
 	ListaPozycji_Ptr pobierzMozliweRuchy();
+	ListaKratek_Ptr pobierzDane();
 	Matrix_Ptr wykonajRuch(Pozycja &poz);
 	int liczRzedem(int row, EKratka player);
 	int liczKolumnowo(int column, EKratka player);

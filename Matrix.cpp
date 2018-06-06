@@ -16,14 +16,6 @@ Matrix::Matrix(int rozmiar)
 	init();
 }
 
-Matrix::Matrix(Tablica_Ptr data, int rozmiar)
-{
-	this->ruchyWyczerpane = 0;
-	this->rozmiar = rozmiar;
-	this->data = data;
-	init();
-}
-
 Matrix::~Matrix()
 {
 }
@@ -47,6 +39,21 @@ void Matrix::init()
 		for (int j = 0; j < this->rozmiar; j++)
 		{
 			row.push_back(Pusta);
+		}
+		this->data->push_back(row);
+	}
+}
+
+void Matrix::init(ListaKratek_Ptr pozycje)
+{
+	for (int i = 0; i < this->rozmiar; i++)
+	{
+		std::vector <EKratka> row;
+		for (int j = 0; j < this->rozmiar; j++)
+		{
+			int idx = indeks(i, j);
+			EKratka k = pozycje->at(idx);
+			row.push_back(k);
 		}
 		this->data->push_back(row);
 	}
@@ -128,7 +135,7 @@ Matrix_Ptr Matrix::wykonajRuch(Pozycja &poz)
 
 ListaPozycji_Ptr Matrix::pobierzMozliweRuchy()
 {
-	ListaPozycji_Ptr movesList = std::make_shared<ListaPozycji>();
+	ListaPozycji_Ptr lista = std::make_shared<ListaPozycji>();
 	Pozycja temp;
 	for (int i = 0; i < this->rozmiar; i++)
 	{
@@ -138,11 +145,25 @@ ListaPozycji_Ptr Matrix::pobierzMozliweRuchy()
 			{
 				temp.y = i;
 				temp.x = j;
-				movesList->push_back(temp);
+				lista->push_back(temp);
 			}
 		}
 	}
-	return movesList;
+	return lista;
+}
+
+ListaKratek_Ptr Matrix::pobierzDane()
+{
+	ListaKratek_Ptr lista = std::make_shared<ListaKratek>();
+	for (int i = 0; i < this->rozmiar; i++)
+	{
+		for (int j = 0; j < this->rozmiar; j++)
+		{
+			EKratka k = this->data->at(i).at(j);
+			lista->push_back(k);
+		}
+	}
+	return lista;
 }
 
 bool Matrix::czyKoniecGry()
