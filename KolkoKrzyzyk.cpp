@@ -92,8 +92,8 @@ bool KolkoKrzyzyk::czyTerazRuchGracza()
 void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
 	terazRuchGracza = false;
-	//int najlepszyRuch = this->nalepszyRuch(this->matrix, ustawienia->pobierzRozmiarSiatki(), kratka);
-	//ustawKratke(najlepszyRuch);
+	int najlepszyRuch = this->nalepszyRuch(this->matrix, ustawienia->pobierzRozmiarSiatki(), kratka);
+	ustawKratke(najlepszyRuch);
 	terazRuchGracza = true;
 }
 
