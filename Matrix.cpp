@@ -20,7 +20,7 @@ Matrix::~Matrix()
 {
 }
 
-void Matrix::init()
+void Matrix::clearData()
 {
 	std::vector< std::vector<EKratka> >::iterator row;
 	std::vector<EKratka>::iterator col;
@@ -32,7 +32,11 @@ void Matrix::init()
 		}
 	}
 	this->data->clear();
+}
 
+void Matrix::init()
+{
+	clearData();
 	for (int i = 0; i < this->rozmiar; i++)
 	{
 		std::vector <EKratka> row;
@@ -46,13 +50,22 @@ void Matrix::init()
 
 void Matrix::init(ListaKratek_Ptr pozycje)
 {
+	clearData();
+
 	for (int i = 0; i < this->rozmiar; i++)
 	{
 		std::vector <EKratka> row;
 		for (int j = 0; j < this->rozmiar; j++)
 		{
 			int idx = indeks(i, j);
-			EKratka k = pozycje->at(idx);
+			EKratka k = Pusta;
+			if (XZnak == pozycje->at(idx))
+			{
+				k = XZnak; 
+			}
+			else if (OZnak == pozycje->at(idx)) {
+				k = OZnak;
+			}
 			row.push_back(k);
 		}
 		this->data->push_back(row);

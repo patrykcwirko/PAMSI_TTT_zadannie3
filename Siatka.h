@@ -24,7 +24,6 @@ public:
 	Siatka(Ustawienia_Ptr ustawienia);
 	virtual ~Siatka();
 	void ustawParametry(Ustawienia_Ptr ustawienia);
-	void ustawWielkosc(int rozmiarSiatki);
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
 	int wyliczKratke(LPARAM LParam);
 };

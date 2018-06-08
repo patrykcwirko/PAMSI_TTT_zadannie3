@@ -1,78 +1,68 @@
 #include "stdafx.h"
 #include "KolkoKrzyzyk.h"
 
+int KolkoKrzyzyk::wielkosc = DFLT_ILOSC_W_RZEDZIE;
+
 KolkoKrzyzyk::KolkoKrzyzyk() : 
-	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(true), ruchyWyczerpane(0), iloscElementow(0), 
-	turn(OZnak), matrix(nullptr), tempMatrix(nullptr), cache(nullptr), ustawienia(nullptr)
+	terazRuchGracza(true), ruchyWyczerpane(0), matrix(nullptr), tempMatrix(nullptr), ustawienia(nullptr)
 {
 	this->ustawienia = std::make_shared< Ustawienia >();
 	this->wielkosc = ustawienia->pobierzRozmiarSiatki();
 	this->matrix = std::make_shared< Matrix >();
-	this->init();
+	this->matrix->init();
 }
 
 KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) : 
-	wielkosc(DFLT_ILOSC_W_RZEDZIE), terazRuchGracza(true), ruchyWyczerpane(0), iloscElementow(0),
-	turn(OZnak), matrix(nullptr), tempMatrix(nullptr), cache(nullptr), ustawienia(nullptr)
+	terazRuchGracza(true), ruchyWyczerpane(0), matrix(nullptr), tempMatrix(nullptr), ustawienia(nullptr)
 {
+	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
 	this->ustawienia = ustawienia;
-	this->wielkosc = ustawienia->pobierzRozmiarSiatki();
 	this->matrix = std::make_shared< Matrix >(this->wielkosc);
-	this->init();
+	this->matrix->init();
 }
 
 KolkoKrzyzyk::~KolkoKrzyzyk()
 {
-	if (this->cache != nullptr)
-	{
-		this->cache->clear();
-	}
+}
+
+void KolkoKrzyzyk::reset()
+{
+	this->matrix->init();
 }
 
 void KolkoKrzyzyk::ustawParametry(Ustawienia_Ptr ustawienia)
 {
+	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
 	this->ustawienia = ustawienia;
-	this->wielkosc = ustawienia->pobierzRozmiarSiatki();
-	this->init();
-}
-
-void KolkoKrzyzyk::ustawWielkosc(int wielkosc)
-{
-	this->wielkosc = wielkosc;
-	this->init();
+	this->matrix->init();
 }
 
 bool KolkoKrzyzyk::ustawKratke(int kratka)
 {
-	int ilKratek = this->ustawienia->pobierzRozmiarSiatki() * this->ustawienia->pobierzRozmiarSiatki();
+	int ilKratek = KolkoKrzyzyk::wielkosc * KolkoKrzyzyk::wielkosc;
 	if (kratka <0 || kratka >ilKratek-1) { return false; }
-	int x = kratka / this->ustawienia->pobierzRozmiarSiatki();
-	int y = kratka - (x * this->ustawienia->pobierzRozmiarSiatki());
-	//std::string ctr1 = Narzedzia::kratkaNaString(Pusta);
+
+	int x = kratka / KolkoKrzyzyk::wielkosc;
+	int y = kratka - (x * KolkoKrzyzyk::wielkosc);
 	std::string ctr2 = Narzedzia::kratkaNaString(this->matrix->pobierz(x, y)); 
 	Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) + ":" + ctr2);
 
-	if (this->matrix->pobierz(x, y) != Pusta )
+	if (this->matrix->pobierz(kratka) != Pusta )
 	{
 		return false;
 	}
 	if (this->status() == RuchGracza) 
 	{
-		this->matrix->ustaw(x, y, XZnak);
+		this->matrix->ustaw(kratka, XZnak);
 		terazRuchGracza = false;
 		return true;
 	}
 	if (this->status() == RuchKomputera)
 	{
-		this->matrix->ustaw(x, y, OZnak);
+		this->matrix->ustaw(kratka, OZnak);
 		terazRuchGracza = true;
 	}
 	return true;
-}
-
-void KolkoKrzyzyk::init()
-{
-	matrix->init();
 }
 
 EKIK KolkoKrzyzyk::status()
@@ -92,7 +82,9 @@ bool KolkoKrzyzyk::czyTerazRuchGracza()
 void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
 	terazRuchGracza = false;
-	int najlepszyRuch = this->nalepszyRuch(this->matrix, ustawienia->pobierzRozmiarSiatki(), kratka);
+	int najlepszyRuch = algorytm(OZnak);
+	//TEST 
+	//int najlepszyRuch = testujRuchLosowo();
 	ustawKratke(najlepszyRuch);
 	terazRuchGracza = true;
 }
@@ -107,25 +99,6 @@ EKratka KolkoKrzyzyk::pobierz(int index)
 	return this->matrix->pobierz(index);
 }
 
-int KolkoKrzyzyk::nalepszyRuch(Matrix_Ptr matrix, int rozmiarSiatki, EKratka kratka)
-{
-	//EKIK 
-	this->turn = kratka;
-	if (this->cache != nullptr)
-	{
-		this->cache->clear();
-	}
-	this->cache = std::make_shared< std::map<int, int> >();
-	this->matrix = matrix;
-	this->wielkosc = rozmiarSiatki;
-	this->iloscElementow = rozmiarSiatki * rozmiarSiatki;
-
-	return algorytm();
-	//TEST 
-	//return testujRuchLosowo();
-
-}
-
 int KolkoKrzyzyk::testujRuchLosowo()
 {
 	int limit = 1000;
@@ -133,7 +106,7 @@ int KolkoKrzyzyk::testujRuchLosowo()
 	{
 		if (--limit == 0)
 		{
-			return NIEPOPRAWNA_KRATKA;
+			return NIEPOPRAWNA;
 		}
 		int kratka = (rand() * (int)(this->wielkosc * this->wielkosc) / RAND_MAX);
 		int y = kratka / this->wielkosc;
@@ -145,74 +118,132 @@ int KolkoKrzyzyk::testujRuchLosowo()
 	}
 }
 
-int KolkoKrzyzyk::algorytm()
+int KolkoKrzyzyk::algorytm(EKratka gracz)
 {
-	int odpowiedz = NIEPOPRAWNA_KRATKA;
-	int punkty = NIEPOPRAWNA;
-	int ilosc = this->wielkosc * this->wielkosc;
-	for (int i = 0; i < ilosc; ++i)
-	{
-		if (this->matrix->pobierz(i) == Pusta)
-		{
-			this->matrix->ustaw(i, OZnak);
-			Matrix_Ptr tmpMatrix = std::make_shared<Matrix>(this->wielkosc);
-			tmpMatrix->init(this->matrix->pobierzDane());
-			int tempPunkty = -alphaBeta(tmpMatrix, OZnak, true, ALFA, BETA);
-			this->matrix->ustaw(i, Pusta);
-			if (tempPunkty > punkty)
-			{
-				punkty = tempPunkty;
-				odpowiedz = i;
+	Wynik_Ptr wynik;
+	if (gracz == XZnak) {
+		wynik = ruchNaMax(this->matrix, 0, INT16_MIN, INT16_MAX);
+	}
+	else {
+		wynik = ruchNaMin(this->matrix, 0, INT16_MIN, INT16_MAX);
+	}
+	return this->matrix->indeks(wynik->pozycja->x, wynik->pozycja->y);
+}
+
+Wynik_Ptr KolkoKrzyzyk::ruchNaMax(Matrix_Ptr matrix, int glebokosc, int alpha, int beta) {
+	if (czyKoniec(matrix)) {
+		return std::make_shared<Wynik>(policzPunkty(matrix, glebokosc), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
+	}
+	Wynik_Ptr maxRuch = std::make_shared<Wynik>(INT16_MIN, std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
+
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; ++i) {
+		for (int j = 0; j < KolkoKrzyzyk::wielkosc; ++j) {
+			if (matrix->pobierz(i, j) == Pusta) {
+				matrix->ustaw(i, j, XZnak);
+				Wynik_Ptr ruch = ruchNaMin(matrix, glebokosc + 1, alpha, beta);
+				matrix->ustaw(i, j, Pusta);
+				if (ruch->punkty > maxRuch->punkty) {
+					maxRuch->punkty = ruch->punkty;
+					maxRuch->pozycja->x = i;
+					maxRuch->pozycja->y = j;
+				}
+				if (ruch->punkty >= beta) {
+					return maxRuch;
+				}
+				if (ruch->punkty > alpha) {
+					alpha = ruch->punkty;
+				}
 			}
 		}
 	}
-	return odpowiedz;
+
+	return maxRuch;
 }
 
-int KolkoKrzyzyk::alphaBeta(Matrix_Ptr matrix, EKratka gracz, bool znaleziono, int alfa, int beta)
-{
-	if (this->matrix->czyKoniecGry())
-	{
-		int a = std::abs(alfa);
-		int b = std::abs(beta);
-		return (a > b) ? a : b;
+Wynik_Ptr KolkoKrzyzyk::ruchNaMin(Matrix_Ptr matrix, int glebokosc, int alpha, int beta) {
+	if (czyKoniec(matrix)) {
+		return std::make_shared<Wynik>(policzPunkty(matrix, glebokosc), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 	}
+	Wynik_Ptr minRuch = std::make_shared<Wynik>(INT16_MAX, std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; ++i) {
+		for (int j = 0; j < KolkoKrzyzyk::wielkosc; ++j) {
+			if (matrix->pobierz(i, j) == Pusta) {
+				matrix->ustaw(i, j, OZnak);
+				Wynik_Ptr ruch = ruchNaMax(matrix, glebokosc + 1, alpha, beta);
+				matrix->ustaw(i, j, Pusta);
 
-	int ilosc = this->wielkosc * this->wielkosc;
-	for (int i = 0; i < ilosc; ++i)
-	{
-		if (this->matrix->pobierz(i) == Pusta)
-		{
-			this->matrix->ustaw(i, gracz);
-			//((gracz == XZnak) ? OZnak : XZnak)
-			int najlepszy = -alphaBeta(matrix, gracz, !znaleziono, alfa, beta);
-			if (znaleziono == false)
-			{
-				if (najlepszy < beta)
-				{
-					beta = najlepszy;
-					if (alfa >= beta)
-					{
-						this->matrix->ustaw(i, Pusta);
-						return beta;
-					}
+				if (ruch->punkty < minRuch->punkty) {
+					minRuch->punkty = ruch->punkty;
+					minRuch->pozycja->x = i;
+					minRuch->pozycja->y = j;
+				}
+
+				if (ruch->punkty <= alpha) {
+					return minRuch;
+				}
+
+				if (ruch->punkty < beta) {
+					beta = ruch->punkty;
 				}
 			}
-			else
-			{
-				if (najlepszy > alfa)
-				{
-					alfa = najlepszy;
-					if (alfa >= beta)
-					{
-						this->matrix->ustaw(i, Pusta);
-						return alfa;
-					}
-				}
-			}
-			this->matrix->ustaw(i, Pusta);
 		}
 	}
-	return (znaleziono) ? alfa : beta;
+
+	return minRuch;
 }
 
+bool KolkoKrzyzyk::czyWygral(Matrix_Ptr matrix, EKratka gracz) {
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; ++i) {
+		bool czyWierszami = true, czyKolumnami = true;
+		for (int j = 0; j < KolkoKrzyzyk::wielkosc; ++j) {
+			if (matrix->pobierz(i, j) != gracz) {
+				czyWierszami = false;
+			}
+
+			if (matrix->pobierz(i, j) != gracz) {
+				czyKolumnami = false;
+			}
+		}
+
+		if (czyWierszami || czyKolumnami) {
+			return true;
+		}
+	}
+
+	bool czyPrzekatna = true, czyPrzekatnaBis = true;
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; ++i) {
+		if (matrix->pobierz(i, i) != gracz) {
+			czyPrzekatna = false;
+		}
+		if (matrix->pobierz(KolkoKrzyzyk::wielkosc - 1 - i, i) != gracz) {
+			czyPrzekatnaBis = false;
+		}
+	}
+	return czyPrzekatna || czyPrzekatnaBis;
+}
+
+int KolkoKrzyzyk::policzPunkty(Matrix_Ptr matrix, int glebokosc) {
+	if (czyWygral(matrix, XZnak)) {
+		return 10 - glebokosc;
+	}
+	else if (czyWygral(matrix, OZnak)) {
+		return glebokosc - 10;
+	}
+	return 0;
+}
+
+bool KolkoKrzyzyk::czyKoniec(Matrix_Ptr matrix) {
+	return czyWygral(matrix, XZnak) || czyWygral(matrix, OZnak) || czyKoniecGry(matrix);
+}
+
+bool KolkoKrzyzyk::czyKoniecGry(Matrix_Ptr matrix) {
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; ++i) {
+		for (int j = 0; j < KolkoKrzyzyk::wielkosc; ++j) {
+			if (matrix->pobierz(i, j) == Pusta) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}

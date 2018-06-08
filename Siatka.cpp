@@ -12,11 +12,6 @@ Siatka::Siatka(Ustawienia_Ptr ustawienia) : ustawienia(nullptr)
 	this->ustawienia = ustawienia;
 }
 
-void Siatka::ustawWielkosc(int rozmiarSiatki)
-{
-	this->ustawienia = std::make_shared<Ustawienia>(rozmiarSiatki);
-}
-
 Siatka::~Siatka()
 {
 }
@@ -111,7 +106,7 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 
 int Siatka::wyliczKratke(LPARAM lParam)
 {
-	int kratka = NIEPOPRAWNA_KRATKA;
+	int kratka = NIEPOPRAWNA;
 	int y = 0, x = 0;
 	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 	for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)

@@ -15,6 +15,8 @@ private:
 	int rozmiar;
 	int ruchyWyczerpane;
 	Tablica_Ptr data;
+	
+	void clearData();
 
 public:
 	Matrix();
