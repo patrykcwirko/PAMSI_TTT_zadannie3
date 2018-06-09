@@ -150,13 +150,13 @@
     <ClInclude Include="KolkoKrzyzyk.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Narzedzia.h" />
-    <ClInclude Include="Siatka.h" />
-    <ClInclude Include="Typy.h" />
-    <ClInclude Include="Ustawienia.h" />
     <ClInclude Include="PAMSI_TTT_zadannie3.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Siatka.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Typy.h" />
+    <ClInclude Include="Ustawienia.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KolkoKrzyzyk.cpp" />
@@ -170,6 +170,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Typy.cpp" />
     <ClCompile Include="Ustawienia.cpp" />
   </ItemGroup>
   <ItemGroup>

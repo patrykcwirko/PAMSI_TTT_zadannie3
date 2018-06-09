@@ -22,9 +22,9 @@ class KolkoKrzyzyk
 {
 private:
 	bool terazRuchGracza;
+	EKIK status;
 	int ruchyWyczerpane;
 	Matrix_Ptr matrix;
-	Matrix_Ptr tempMatrix;
 	Ustawienia_Ptr ustawienia;
 
 	static int wielkosc;
@@ -35,8 +35,9 @@ private:
 	static bool czyKoniecGry(Matrix_Ptr matrix);
 	static bool czyWygral(Matrix_Ptr matrix, EKratka gracz);
 
-	int testujRuchLosowo();
-	int algorytm(EKratka gracz);
+	void log(bool zrodlo, Pozycja_Ptr poz, EKratka kratka);
+	Wynik_Ptr testujRuchLosowo();
+	Wynik_Ptr algorytm(EKratka gracz);
 
 public:
 	KolkoKrzyzyk();
@@ -44,12 +45,12 @@ public:
 	virtual ~KolkoKrzyzyk();
 	void reset();
 	void ustawParametry(Ustawienia_Ptr ustawienia);
-	void wykonajRuchKomp(EKratka OZnak);
+	bool wykonajRuchKomp(EKratka OZnak);
 	bool czyTerazRuchGracza();
-	bool ustawKratke(int kratka);
-	EKIK status();
+	bool ustawKratke(Wynik_Ptr wynik);
+	EKIK czyjRuch();
+	EKIK jakiStatus();
 	EKratka pobierz(int x, int y);
-	EKratka pobierz(int index);
 };
 
 

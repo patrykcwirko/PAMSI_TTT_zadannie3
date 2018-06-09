@@ -2,7 +2,7 @@
 #include "Matrix.h"
 
 
-Matrix::Matrix() : rozmiar(0), ruchyWyczerpane(0), data(nullptr)
+Matrix::Matrix() : rozmiar(0), ruchyWyczerpane(0), wygral(Pusta), data(nullptr)
 {
 	this->data = std::make_shared< Tablica >();
 	init();
@@ -13,7 +13,17 @@ Matrix::Matrix(int rozmiar)
 	this->ruchyWyczerpane = 0;
 	this->data = std::make_shared< Tablica >();
 	this->rozmiar = rozmiar;
+	this->wygral = Pusta;
 	init();
+}
+
+Matrix::Matrix(ListaKratek_Ptr pozycje, int rozmiar)
+{
+	this->ruchyWyczerpane = 0;
+	this->data = std::make_shared< Tablica >();
+	this->rozmiar = rozmiar;
+	this->wygral = Pusta;
+	init(pozycje);
 }
 
 Matrix::~Matrix()
@@ -36,11 +46,12 @@ void Matrix::clearData()
 
 void Matrix::init()
 {
+	this->wygral = Pusta;
 	clearData();
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
 		std::vector <EKratka> row;
-		for (int j = 0; j < this->rozmiar; j++)
+		for (int x = 0; x < this->rozmiar; x++)
 		{
 			row.push_back(Pusta);
 		}
@@ -50,14 +61,14 @@ void Matrix::init()
 
 void Matrix::init(ListaKratek_Ptr pozycje)
 {
+	this->wygral = Pusta;
 	clearData();
-
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
 		std::vector <EKratka> row;
-		for (int j = 0; j < this->rozmiar; j++)
+		for (int x = 0; x < this->rozmiar; x++)
 		{
-			int idx = indeks(i, j);
+			int idx = indeks(x, y); 
 			EKratka k = Pusta;
 			if (XZnak == pozycje->at(idx))
 			{
@@ -72,33 +83,20 @@ void Matrix::init(ListaKratek_Ptr pozycje)
 	}
 }
 
-EKratka Matrix::pobierz(int kratka)
-{
-	int x = kratka / this->rozmiar;
-	int y = kratka - (x* this->rozmiar);
-	return pobierz(x, y);
-}
-
 EKratka Matrix::pobierz(int x, int y)
 {
 	//z kolumy i potem wiersza
-	return this->data->at(x).at(y);
+	return this->data->at(y).at(x);
 }
 
 bool Matrix::ustaw(int x, int y, EKratka kratka)
 {
-	if ((this->data->at(x).at(y) == Pusta)) 
+	if ((this->data->at(y).at(x) == Pusta)) 
 	{
-		this->data->at(x).at(y) = kratka;
+		this->data->at(y).at(x) = kratka;
 		return true;
 	}
 	return false;
-}
-
-bool Matrix::ustaw(int index, EKratka kratka)
-{
-	Pozycja_Ptr poz = pozycja(index);
-	return ustaw(poz->x, poz->y, kratka);
 }
 
 int Matrix::indeks(int x, int y)
@@ -123,24 +121,25 @@ Matrix_Ptr Matrix::wykonajRuch(Pozycja &poz)
 {
 	if (!czyWolne(poz)) return std::make_shared<Matrix>(*this);
 	Matrix_Ptr temp = std::make_shared<Matrix>(this->rozmiar);
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
-		for (int j = 0; j < this->rozmiar; j++)
+		for (int x = 0; x < this->rozmiar; x++)
 		{
-			if (i == poz.y && j == poz.x)
+			if (y == poz.y && x == poz.x)
 			{
 				if ((temp->ruchyWyczerpane % 2) == 0)
 				{
-					temp->ustaw(i, j, XZnak);
+					temp->ustaw(x, y, XZnak);
 				}
 				else {
-					temp->ustaw(i, j, OZnak);
+					temp->ustaw(x, y, OZnak);
 				}
 				temp->ruchyWyczerpane = ruchyWyczerpane + 1;
 			}
-			else {
-				temp->ustaw(i, j, this->data->at(i).at(j));
-			}
+			//TODO
+			//else {
+			//	temp->ustaw(x, y, this->data->at(i).at(j));
+			//}
 		}
 	}
 	return temp;
@@ -150,14 +149,14 @@ ListaPozycji_Ptr Matrix::pobierzMozliweRuchy()
 {
 	ListaPozycji_Ptr lista = std::make_shared<ListaPozycji>();
 	Pozycja temp;
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
-		for (int j = 0; j < this->rozmiar; j++)
+		for (int x = 0; x < this->rozmiar; x++)
 		{
-			if (this->data->at(i).at(j) == Pusta)
+			if (this->data->at(y).at(x) == Pusta)
 			{
-				temp.y = i;
-				temp.x = j;
+				temp.y = y;
+				temp.x = x;
 				lista->push_back(temp);
 			}
 		}
@@ -168,11 +167,20 @@ ListaPozycji_Ptr Matrix::pobierzMozliweRuchy()
 ListaKratek_Ptr Matrix::pobierzDane()
 {
 	ListaKratek_Ptr lista = std::make_shared<ListaKratek>();
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
-		for (int j = 0; j < this->rozmiar; j++)
+		std::vector <EKratka> row;
+		for (int x = 0; x < this->rozmiar; x++)
 		{
-			EKratka k = this->data->at(i).at(j);
+			int idx = indeks(x, y);
+			EKratka k = Pusta;
+			if (XZnak == this->data->at(y).at(x))
+			{
+				k = XZnak;
+			}
+			else if (OZnak == this->data->at(y).at(x)) {
+				k = OZnak;
+			}
 			lista->push_back(k);
 		}
 	}
@@ -196,6 +204,16 @@ bool Matrix::czyKoniecGry()
 	return ((temp == this->rozmiar) || (ruchyWyczerpane == this->rozmiar * this->rozmiar));
 }
 
+void Matrix::ustawWygral(EKratka wygral)
+{
+	this->wygral = wygral;
+}
+
+EKratka Matrix::ktoWygral()
+{
+	return this->wygral;
+}
+
 bool Matrix::czyRemis()
 {
 	int temp = this->rozmiar;
@@ -215,9 +233,9 @@ bool Matrix::czyRemis()
 
 int Matrix::liczRzedem(int row, EKratka player) {
 	int counter = 0;
-	for (int j = 0; j < this->rozmiar; j++)
+	for (int x = 0; x < this->rozmiar; x++)
 	{
-		if (this->data->at(row).at(j) == player)
+		if (this->data->at(row).at(x) == player)
 		{
 			counter++;
 		}
@@ -227,10 +245,9 @@ int Matrix::liczRzedem(int row, EKratka player) {
 int Matrix::liczKolumnowo(int column, EKratka player)
 {
 	int counter = 0;
-	for (int i = 0; i < this->rozmiar; i++)
+	for (int y = 0; y < this->rozmiar; y++)
 	{
-		Pozycja_Ptr poz = pozycja(i);
-		if (this->data->at(poz->x).at(poz->y) == player)
+		if (this->data->at(y).at(column) == player)
 		{
 			counter++;
 		}

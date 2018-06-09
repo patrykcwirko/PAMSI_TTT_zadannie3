@@ -18,6 +18,8 @@ private:
 	void narysujSiatke(HDC DC);
 	void narysujKrzyzyk(HDC DC, HBRUSH Brush, HBRUSH MBrush ,int a, int b);
 	void narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int a, int b);
+	Pozycja_Ptr pozycja(int index);
+	void log(Pozycja_Ptr poz);
 
 public:
 	Siatka();
@@ -25,7 +27,7 @@ public:
 	virtual ~Siatka();
 	void ustawParametry(Ustawienia_Ptr ustawienia);
 	void narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik);
-	int wyliczKratke(LPARAM LParam);
+	Pozycja_Ptr wyliczKratke(LPARAM LParam);
 };
 
 typedef std::shared_ptr<Siatka> Siatka_Ptr;

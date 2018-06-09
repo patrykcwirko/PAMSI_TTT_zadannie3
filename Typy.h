@@ -35,9 +35,14 @@ typedef std::shared_ptr< Pozycja > Pozycja_Ptr;
 struct Wynik
 {
 	int punkty;
+	EKratka wygral;
 	Pozycja_Ptr pozycja;
 	Wynik();
 	Wynik(int p, Pozycja_Ptr poz);
+	Wynik(int p, EKratka wygral, Pozycja_Ptr poz);
+	void ustawWygral(EKratka wygral);
+	EKratka ktoWygral();
+	Pozycja_Ptr pobierzPozycje();
 };
 typedef std::shared_ptr< Wynik > Wynik_Ptr;
 

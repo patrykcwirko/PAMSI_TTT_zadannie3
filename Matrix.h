@@ -14,6 +14,7 @@ class Matrix
 private:
 	int rozmiar;
 	int ruchyWyczerpane;
+	EKratka wygral;
 	Tablica_Ptr data;
 	
 	void clearData();
@@ -21,14 +22,13 @@ private:
 public:
 	Matrix();
 	Matrix(int rozmiar);
+	Matrix(ListaKratek_Ptr pozycje, int rozmiar);
 	virtual ~Matrix();
 
 	void init();
 	void init(ListaKratek_Ptr pozycje);
 	EKratka pobierz(int x, int y);
-	EKratka pobierz(int index);
 	bool ustaw(int x, int y, EKratka kratka);
-	bool ustaw(int index, EKratka kratka);
 
 	int indeks(int y, int x);
 	Pozycja_Ptr pozycja(int index);
@@ -43,5 +43,7 @@ public:
 	int liczKolumnowo(int column, EKratka player);
 	int liczPoPrzekatnej1(EKratka player);
 	int liczPoPrzekatnej2(EKratka player);
+	void ustawWygral(EKratka wygral);
+	EKratka ktoWygral();
 };
 

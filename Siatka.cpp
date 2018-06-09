@@ -36,15 +36,15 @@ void Siatka::narysuj(HWND *Window, KolkoKrzyzyk_Ptr ptrKik)
 	int iloscKratek = this->ustawienia->pobierzRozmiarSiatki() *  this->ustawienia->pobierzRozmiarSiatki();
 	for (int i = 0; i<iloscKratek; i++)
 	{
-		y = i / this->ustawienia->pobierzRozmiarSiatki();
-		x = i - (y* this->ustawienia->pobierzRozmiarSiatki());
+		x = i / this->ustawienia->pobierzRozmiarSiatki();
+		y = i - (x* this->ustawienia->pobierzRozmiarSiatki());
 		x *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 		y *= (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
-		if (ptrKik->pobierz(i) == XZnak)
+		Pozycja_Ptr poz = pozycja(i);
+		if (ptrKik->pobierz(poz->x, poz->y) == XZnak)
 		{
 			narysujKrzyzyk(DC, Brush, MBrush, x, y);
-		}
-		if (ptrKik->pobierz(i) == OZnak)
+		} else if (ptrKik->pobierz(poz->x, poz->y) == OZnak)
 		{
 			narysujKolko(DC, Brush, MBrush, x, y);
 		}
@@ -104,9 +104,10 @@ void Siatka::narysujKolko(HDC DC, HBRUSH Brush, HBRUSH MBrush, int x, int y)
 }
 
 
-int Siatka::wyliczKratke(LPARAM lParam)
+Pozycja_Ptr Siatka::wyliczKratke(LPARAM lParam)
 {
-	int kratka = NIEPOPRAWNA;
+	Pozycja p = { NIEPOPRAWNA, NIEPOPRAWNA };
+	Pozycja_Ptr poz = std::make_shared<Pozycja>(p);
 	int y = 0, x = 0;
 	int dlKratki = (int)(TDLUGOSC / ustawienia->pobierzRozmiarSiatki());
 	for (y = 0; y < this->ustawienia->pobierzRozmiarSiatki(); y++)
@@ -117,12 +118,26 @@ int Siatka::wyliczKratke(LPARAM lParam)
 			{
 				if (HIWORD(lParam) >= (y * dlKratki) && HIWORD(lParam) <(y * dlKratki) + dlKratki)
 				{
-					Narzedzia::printLog(std::to_string(x) + "," + std::to_string(y) );
-					kratka = y + (x * this->ustawienia->pobierzRozmiarSiatki());
-					return kratka;
+					Pozycja p = { x, y };
+					Pozycja_Ptr poz = std::make_shared<Pozycja>(p);
+					log(poz);
+					return poz;
 				}
 			}
 		}
 	}
-	return kratka;
+	return poz;
+}
+
+Pozycja_Ptr Siatka::pozycja(int index)
+{
+	int y = index / this->ustawienia->pobierzRozmiarSiatki();
+	int x = index - (y * this->ustawienia->pobierzRozmiarSiatki());
+	Pozycja p = { x, y };
+	return std::make_shared<Pozycja>(p);
+}
+
+void Siatka::log(Pozycja_Ptr poz)
+{
+	Narzedzia::printLog("Siatka: " + std::to_string(poz->x) + "," + std::to_string(poz->y));
 }

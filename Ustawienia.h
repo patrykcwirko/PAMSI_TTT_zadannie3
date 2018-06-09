@@ -5,7 +5,7 @@
 #include "Narzedzia.h"
 #include "Typy.h"
 
-#define DFLT_ILOSC_W_RZEDZIE 5
+#define DFLT_ILOSC_W_RZEDZIE 3
 #define TDLUGOSC 406
 #define TWYSOKOSC 445
 
