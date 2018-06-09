@@ -57,13 +57,11 @@ bool KolkoKrzyzyk::ustawKratke(Wynik_Ptr wynik)
 		{
 			this->matrix->ustaw(wynik->pobierzPozycje()->x, wynik->pobierzPozycje()->y, XZnak);
 			usawionoKratke = true;
-			terazRuchGracza = false;
 			log(true, wynik->pobierzPozycje(), XZnak);
 		} else if (this->czyjRuch() == RuchKomputera)
 		{
 			this->matrix->ustaw(wynik->pobierzPozycje()->x, wynik->pobierzPozycje()->y, OZnak);
 			usawionoKratke = true;
-			terazRuchGracza = true;
 			log(true, wynik->pobierzPozycje(), OZnak);
 		}
 	}
@@ -89,39 +87,23 @@ bool KolkoKrzyzyk::czyTerazRuchGracza()
 	return terazRuchGracza;
 }
 
-bool KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
+void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
-	terazRuchGracza = false;
+	if (czyKoniec(this->matrix)) {
+		zapamietajWynik();
+		return;
+	}
+	this->terazRuchGracza = false;
 	//Wynik_Ptr najlepszyRuch = algorytm(OZnak);
 	//TEST 
 	Wynik_Ptr najlepszyRuch = testujRuchLosowo();
+	ustawKratke(najlepszyRuch);
 
-	bool wygral = (najlepszyRuch->ktoWygral() != Pusta);
-	if (!wygral) {
-		bool wygral = ustawKratke(najlepszyRuch);
-		if(!wygral) 
-		{
-			terazRuchGracza = true;
-		}
+	if (czyKoniec(this->matrix)) {
+		zapamietajWynik();
+		return;
 	}
-	if (wygral)
-	{
-		EKIK wynik = (this->matrix->czyRemis()) ? Remis : Gramy;
-		if (this->czyjRuch() != Remis)
-		{
-			EKratka wygral = this->matrix->ktoWygral();
-			if (wygral == XZnak)
-			{
-				wynik = GraczWygrywa;
-			}
-			if (wygral == OZnak)
-			{
-				wynik = KomputerWygrywa;
-			}
-			this->status = wynik;
-		}
-	}
-	return wygral;
+	this->terazRuchGracza = true;
 }
 
 EKratka KolkoKrzyzyk::pobierz(int x, int y)
@@ -133,10 +115,6 @@ Wynik_Ptr KolkoKrzyzyk::testujRuchLosowo()
 {
 	int iloscKratek = KolkoKrzyzyk::wielkosc * KolkoKrzyzyk::wielkosc;
 	std::vector<int> wolneKratki = std::vector<int>();
-	
-	if (czyKoniec(this->matrix)) {
-		return std::make_shared<Wynik>(policzPunkty(this->matrix, 0), this->matrix->ktoWygral(), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
-	}
 
 	Pozycja poz = { NIEPOPRAWNA, NIEPOPRAWNA };
 	Pozycja_Ptr ptrPoz = std::make_shared<Pozycja>(poz);
@@ -173,6 +151,9 @@ Wynik_Ptr KolkoKrzyzyk::algorytm(EKratka gracz)
 	}
 	else {
 		wynik = ruchNaMin(alfaBeta, 0, INT16_MIN, INT16_MAX);
+	}
+	if (czyKoniec(alfaBeta)) {
+		return std::make_shared<Wynik>(policzPunkty(alfaBeta, 0), alfaBeta->ktoWygral(), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 	}
 	return wynik;
 }
@@ -299,6 +280,24 @@ bool KolkoKrzyzyk::czyWygral(Matrix_Ptr alfaBeta, EKratka gracz) {
 		}
 	}
 	return czyPrzekatna || czyPrzekatnaBis;
+}
+
+void KolkoKrzyzyk::zapamietajWynik()
+{
+	EKIK wynik = (this->matrix->czyRemis()) ? Remis : Gramy;
+	if (this->czyjRuch() != Remis)
+	{
+		EKratka wygral = this->matrix->ktoWygral();
+		if (wygral == XZnak)
+		{
+			wynik = GraczWygrywa;
+		}
+		if (wygral == OZnak)
+		{
+			wynik = KomputerWygrywa;
+		}
+		this->status = wynik;
+	}
 }
 
 void KolkoKrzyzyk::log(bool zrodlo, Pozycja_Ptr poz, EKratka kratka)

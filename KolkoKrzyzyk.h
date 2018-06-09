@@ -38,6 +38,7 @@ private:
 	void log(bool zrodlo, Pozycja_Ptr poz, EKratka kratka);
 	Wynik_Ptr testujRuchLosowo();
 	Wynik_Ptr algorytm(EKratka gracz);
+	void zapamietajWynik();
 
 public:
 	KolkoKrzyzyk();
@@ -45,7 +46,7 @@ public:
 	virtual ~KolkoKrzyzyk();
 	void reset();
 	void ustawParametry(Ustawienia_Ptr ustawienia);
-	bool wykonajRuchKomp(EKratka OZnak);
+	void wykonajRuchKomp(EKratka OZnak);
 	bool czyTerazRuchGracza();
 	bool ustawKratke(Wynik_Ptr wynik);
 	EKIK czyjRuch();
