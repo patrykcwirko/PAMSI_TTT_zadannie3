@@ -19,6 +19,8 @@ KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) :
 	this->ustawienia = ustawienia;
 	this->matrix = std::make_shared< Matrix >(this->wielkosc);
 	this->matrix->init();
+	this->terazRuchGracza = true;
+	this->status = Gramy;
 }
 
 KolkoKrzyzyk::~KolkoKrzyzyk()
@@ -36,6 +38,8 @@ void KolkoKrzyzyk::ustawParametry(Ustawienia_Ptr ustawienia)
 {
 	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
 	this->ustawienia = ustawienia;
+	this->matrix->clearData();
+	this->matrix = std::make_shared< Matrix >(this->wielkosc);
 	this->matrix->init();
 	this->terazRuchGracza = true;
 }
@@ -91,6 +95,7 @@ void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
 	if (czyKoniec(this->matrix)) {
 		zapamietajWynik();
+		this->terazRuchGracza = false;
 		return;
 	}
 	this->terazRuchGracza = false;
@@ -101,6 +106,7 @@ void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 
 	if (czyKoniec(this->matrix)) {
 		zapamietajWynik();
+		this->terazRuchGracza = false;
 		return;
 	}
 	this->terazRuchGracza = true;

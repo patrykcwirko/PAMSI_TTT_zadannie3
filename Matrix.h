@@ -16,8 +16,6 @@ private:
 	int ruchyWyczerpane;
 	EKratka wygral;
 	Tablica_Ptr data;
-	
-	void clearData();
 
 public:
 	Matrix();
@@ -25,6 +23,7 @@ public:
 	Matrix(ListaKratek_Ptr pozycje, int rozmiar);
 	virtual ~Matrix();
 
+	void clearData();
 	void init();
 	void init(ListaKratek_Ptr pozycje);
 	EKratka pobierz(int x, int y);
