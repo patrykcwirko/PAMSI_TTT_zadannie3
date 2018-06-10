@@ -88,7 +88,7 @@ EKIK KolkoKrzyzyk::jakiStatus()
 
 bool KolkoKrzyzyk::czyTerazRuchGracza()
 {
-	return terazRuchGracza;
+	return terazRuchGracza && this->status == Gramy;
 }
 
 void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
@@ -99,9 +99,9 @@ void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 		return;
 	}
 	this->terazRuchGracza = false;
-	//Wynik_Ptr najlepszyRuch = algorytm(OZnak);
+	Wynik_Ptr najlepszyRuch = algorytm(OZnak);
 	//TEST 
-	Wynik_Ptr najlepszyRuch = testujRuchLosowo();
+	//Wynik_Ptr najlepszyRuch = testujRuchLosowo();
 	ustawKratke(najlepszyRuch);
 
 	if (czyKoniec(this->matrix)) {
@@ -150,16 +150,14 @@ Wynik_Ptr KolkoKrzyzyk::algorytm(EKratka gracz)
 	Pozycja poz = { NIEPOPRAWNA, NIEPOPRAWNA };
 	Pozycja_Ptr ptrPoz = std::make_shared<Pozycja>(poz);
 	Wynik_Ptr wynik = std::make_shared<Wynik>(0, Pusta, ptrPoz);
-	ListaKratek_Ptr kratki = this->matrix->pobierzDane();
-	Matrix_Ptr alfaBeta = std::make_shared< Matrix >(kratki, this->wielkosc);
+	//ListaKratek_Ptr kratki = this->matrix->pobierzDane();
+	//Matrix_Ptr alfaBeta = std::make_shared< Matrix >(kratki, this->wielkosc);
+	Matrix_Ptr alfaBeta = this->matrix;
 	if (gracz == XZnak) {
 		wynik = ruchNaMax(alfaBeta, 0, INT16_MIN, INT16_MAX);
 	}
 	else {
 		wynik = ruchNaMin(alfaBeta, 0, INT16_MIN, INT16_MAX);
-	}
-	if (czyKoniec(alfaBeta)) {
-		return std::make_shared<Wynik>(policzPunkty(alfaBeta, 0), alfaBeta->ktoWygral(), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 	}
 	return wynik;
 }

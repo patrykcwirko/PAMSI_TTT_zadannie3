@@ -91,7 +91,7 @@ EKratka Matrix::pobierz(int x, int y)
 
 bool Matrix::ustaw(int x, int y, EKratka kratka)
 {
-	if ((this->data->at(y).at(x) == Pusta)) 
+	if (true || (this->data->at(y).at(x) == Pusta)) 
 	{
 		this->data->at(y).at(x) = kratka;
 		return true;
