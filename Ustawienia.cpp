@@ -11,6 +11,15 @@ void Ustawienia::ustawRozmiarSiatki(int rozmiar)
 	this->rozmiarSiatki = rozmiar;
 }
 
+int Ustawienia::pobierzGlebokoscSzukania()
+{
+	return this->glebokoscSzukania;
+}
+void Ustawienia::ustawGlebokoscSzukania(int glebokosc)
+{
+	this->glebokoscSzukania = glebokosc;
+}
+
 bool Ustawienia::czyZaczynaKomputer()
 {
 	return this->zaczynaKomputer;
@@ -21,14 +30,14 @@ void Ustawienia::ustawZaczynaKomputer(bool czyKomputer)
 	this->zaczynaKomputer = czyKomputer;
 }
 
-bool Ustawienia::czyWygranaGdyPiec()
+bool Ustawienia::czyGraWartLosowymi()
 {
-	return this->wygranaGdyPiec;
+	return this->graWartLosowymi;
 }
 
-void Ustawienia::ustawWygranaGdyPiec(bool czyPiecToWygrana)
+void Ustawienia::ustawGraWartLosowymi(bool graLosowymi)
 {
-	this->wygranaGdyPiec = czyPiecToWygrana;
+	this->graWartLosowymi = graLosowymi;
 }
 
 String_Ptr Ustawienia::info()
@@ -36,9 +45,11 @@ String_Ptr Ustawienia::info()
 	std::string txt;
 	txt.append("Ustawienia => ilosc: ");
 	txt.append(std::to_string(rozmiarSiatki));
+	txt.append(",  glebokosc szukania: ");
+	txt.append(std::to_string(glebokoscSzukania));
 	txt.append(", zaczynaKomputer: ");
 	txt.append(std::to_string(zaczynaKomputer));
-	txt.append(",  wygranaGdyPiec: ");
-	txt.append(std::to_string(wygranaGdyPiec));
+	txt.append(",  gra wart. losowymi: ");
+	txt.append(std::to_string(graWartLosowymi));
 	return std::make_shared<std::string>(txt);
 }

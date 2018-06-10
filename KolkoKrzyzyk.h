@@ -10,7 +10,6 @@
 #include "Narzedzia.h"
 #include "Typy.h"
 
-#define GLEBOKOSC	8
 #define BETA		1000000
 #define ALFA		-BETA
 
@@ -23,22 +22,25 @@ class KolkoKrzyzyk
 private:
 	bool terazRuchGracza;
 	EKIK status;
+	EKratka wygral;
 	int ruchyWyczerpane;
 	Matrix_Ptr matrix;
 	Ustawienia_Ptr ustawienia;
 
 	static int wielkosc;
-	static Wynik_Ptr ruchNaMax(Matrix_Ptr matrix, int glebokosc, int alpha, int beta);
-	static Wynik_Ptr ruchNaMin(Matrix_Ptr matrix, int glebokosc, int alpha, int beta);
-	static bool czyKoniec(Matrix_Ptr matrix);
-	static int policzPunkty(Matrix_Ptr matrix, int glebokosc);
-	static bool czyKoniecGry(Matrix_Ptr matrix);
-	static bool czyWygral(Matrix_Ptr matrix, EKratka gracz);
+	static int glebokoscSzukania;
+	static Wynik_Ptr ruchNaMax(Matrix_Ptr alfaBeta, int glebokosc, int alpha, int beta);
+	static Wynik_Ptr ruchNaMin(Matrix_Ptr alfaBeta, int glebokosc, int alpha, int beta);
+	static EKIK czyKoniec(Matrix_Ptr alfaBeta);
+	static int policzPunkty(Matrix_Ptr alfaBeta, int glebokosc);
+	static bool czyKoniecGry(Matrix_Ptr alfaBeta);
+	static bool czyWygral(Matrix_Ptr alfaBeta, EKratka gracz);
+	static bool czyRemis(Matrix_Ptr alfaBeta);
 
 	void log(bool zrodlo, Pozycja_Ptr poz, EKratka kratka);
 	Wynik_Ptr testujRuchLosowo();
 	Wynik_Ptr algorytm(EKratka gracz);
-	void zapamietajWynik();
+	void zapamietajWynik(EKIK status);
 
 public:
 	KolkoKrzyzyk();
@@ -51,6 +53,7 @@ public:
 	bool ustawKratke(Wynik_Ptr wynik);
 	EKIK czyjRuch();
 	EKIK jakiStatus();
+	EKratka ktoWygral();
 	EKratka pobierz(int x, int y);
 };
 

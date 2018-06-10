@@ -2,12 +2,14 @@
 #include "KolkoKrzyzyk.h"
 
 int KolkoKrzyzyk::wielkosc = DFLT_ILOSC_W_RZEDZIE;
+int KolkoKrzyzyk::glebokoscSzukania = MAX_GLEBOKOSC;
 
 KolkoKrzyzyk::KolkoKrzyzyk() : 
 	terazRuchGracza(true), status(Gramy), ruchyWyczerpane(0), matrix(nullptr), ustawienia(nullptr)
 {
 	this->ustawienia = std::make_shared< Ustawienia >();
-	this->wielkosc = ustawienia->pobierzRozmiarSiatki();
+	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
+	KolkoKrzyzyk::glebokoscSzukania = ustawienia->pobierzGlebokoscSzukania();
 	this->matrix = std::make_shared< Matrix >();
 	this->matrix->init();
 }
@@ -16,6 +18,7 @@ KolkoKrzyzyk::KolkoKrzyzyk(Ustawienia_Ptr ustawienia) :
 	terazRuchGracza(true), status(Gramy), ruchyWyczerpane(0), matrix(nullptr), ustawienia(nullptr)
 {
 	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
+	KolkoKrzyzyk::glebokoscSzukania = ustawienia->pobierzGlebokoscSzukania();
 	this->ustawienia = ustawienia;
 	this->matrix = std::make_shared< Matrix >(this->wielkosc);
 	this->matrix->init();
@@ -37,6 +40,7 @@ void KolkoKrzyzyk::reset()
 void KolkoKrzyzyk::ustawParametry(Ustawienia_Ptr ustawienia)
 {
 	KolkoKrzyzyk::wielkosc = ustawienia->pobierzRozmiarSiatki();
+	KolkoKrzyzyk::glebokoscSzukania = ustawienia->pobierzGlebokoscSzukania();
 	this->ustawienia = ustawienia;
 	this->matrix->clearData();
 	this->matrix = std::make_shared< Matrix >(this->wielkosc);
@@ -86,6 +90,11 @@ EKIK KolkoKrzyzyk::jakiStatus()
 	return this->status;
 }
 
+EKratka KolkoKrzyzyk::ktoWygral()
+{
+	return this->wygral;
+}
+
 bool KolkoKrzyzyk::czyTerazRuchGracza()
 {
 	return terazRuchGracza && this->status == Gramy;
@@ -93,19 +102,27 @@ bool KolkoKrzyzyk::czyTerazRuchGracza()
 
 void KolkoKrzyzyk::wykonajRuchKomp(EKratka kratka)
 {
-	if (czyKoniec(this->matrix)) {
-		zapamietajWynik();
+	EKIK status = czyKoniec(this->matrix);
+	zapamietajWynik(status);
+	if (status != Gramy) {
 		this->terazRuchGracza = false;
 		return;
 	}
 	this->terazRuchGracza = false;
-	Wynik_Ptr najlepszyRuch = algorytm(OZnak);
-	//TEST 
-	//Wynik_Ptr najlepszyRuch = testujRuchLosowo();
+
+	Wynik_Ptr najlepszyRuch = std::make_shared<Wynik>();
+	if (this->ustawienia->czyGraWartLosowymi())
+	{
+		najlepszyRuch = testujRuchLosowo();
+	}
+	else {
+		najlepszyRuch = algorytm(OZnak);
+	}
 	ustawKratke(najlepszyRuch);
 
-	if (czyKoniec(this->matrix)) {
-		zapamietajWynik();
+	status = czyKoniec(this->matrix);
+	zapamietajWynik(status);
+	if (status != Gramy) {
 		this->terazRuchGracza = false;
 		return;
 	}
@@ -163,14 +180,15 @@ Wynik_Ptr KolkoKrzyzyk::algorytm(EKratka gracz)
 }
 
 Wynik_Ptr KolkoKrzyzyk::ruchNaMax(Matrix_Ptr alfaBeta, int glebokosc, int alpha, int beta) {
-	if (czyKoniec(alfaBeta)) {
-		return std::make_shared<Wynik>(policzPunkty(alfaBeta, glebokosc), alfaBeta->ktoWygral(), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
-	}
+	EKIK status = czyKoniec(alfaBeta);
+	if (status != Gramy) {
+		return std::make_shared<Wynik>(policzPunkty(alfaBeta, glebokosc), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
+	} 
 	Wynik_Ptr maxRuch = std::make_shared<Wynik>(INT16_MIN, std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 
 	for (int y = 0; y < KolkoKrzyzyk::wielkosc; ++y) {
 		for (int x = 0; x < KolkoKrzyzyk::wielkosc; ++x) {
-			if (alfaBeta->pobierz(x, y) == Pusta) {
+			if (alfaBeta->pobierz(x, y) == Pusta && (glebokosc < KolkoKrzyzyk::glebokoscSzukania)) {
 				alfaBeta->ustaw(x, y, XZnak);
 				Wynik_Ptr ruch = ruchNaMin(alfaBeta, glebokosc + 1, alpha, beta);
 				alfaBeta->ustaw(x, y, Pusta);
@@ -192,13 +210,14 @@ Wynik_Ptr KolkoKrzyzyk::ruchNaMax(Matrix_Ptr alfaBeta, int glebokosc, int alpha,
 }
 
 Wynik_Ptr KolkoKrzyzyk::ruchNaMin(Matrix_Ptr alfaBeta, int glebokosc, int alpha, int beta) {
-	if (czyKoniec(alfaBeta)) {
+	EKIK status = czyKoniec(alfaBeta);
+	if (status != Gramy) {
 		return std::make_shared<Wynik>(policzPunkty(alfaBeta, glebokosc), std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 	}
 	Wynik_Ptr minRuch = std::make_shared<Wynik>(INT16_MAX, std::make_shared<Pozycja>(NIEPOPRAWNA, NIEPOPRAWNA));
 	for (int y = 0; y < KolkoKrzyzyk::wielkosc; ++y) {
 		for (int x = 0; x < KolkoKrzyzyk::wielkosc; ++x) {
-			if (alfaBeta->pobierz(x, y) == Pusta) {
+			if (alfaBeta->pobierz(x, y) == Pusta && (glebokosc < KolkoKrzyzyk::glebokoscSzukania)) {
 				alfaBeta->ustaw(x, y, OZnak);
 				Wynik_Ptr ruch = ruchNaMax(alfaBeta, glebokosc + 1, alpha, beta);
 				alfaBeta->ustaw(x, y, Pusta);
@@ -230,19 +249,24 @@ int KolkoKrzyzyk::policzPunkty(Matrix_Ptr alfaBeta, int glebokosc) {
 	return 0;
 }
 
-bool KolkoKrzyzyk::czyKoniec(Matrix_Ptr alfaBeta) {
-	bool koniec = czyKoniecGry(alfaBeta);
-	bool wygralX = czyWygral(alfaBeta, XZnak);
-	bool wygralO = czyWygral(alfaBeta, OZnak);
-	if (wygralX)
+EKIK KolkoKrzyzyk::czyKoniec(Matrix_Ptr alfaBeta) {
+	if (czyKoniecGry(alfaBeta))
 	{
-		alfaBeta->ustawWygral(XZnak);
+		return Remis;
 	}
-	if (wygralO)
+	if (czyRemis(alfaBeta))
 	{
-		alfaBeta->ustawWygral(OZnak);
+		return Remis;
 	}
-	return koniec || wygralX || wygralO;
+	if (czyWygral(alfaBeta, XZnak))
+	{
+		return GraczWygrywa;
+	}
+	if (czyWygral(alfaBeta, OZnak))
+	{
+		return KomputerWygrywa;
+	}
+	return Gramy;
 }
 
 bool KolkoKrzyzyk::czyKoniecGry(Matrix_Ptr alfaBeta) {
@@ -286,21 +310,34 @@ bool KolkoKrzyzyk::czyWygral(Matrix_Ptr alfaBeta, EKratka gracz) {
 	return czyPrzekatna || czyPrzekatnaBis;
 }
 
-void KolkoKrzyzyk::zapamietajWynik()
+bool KolkoKrzyzyk::czyRemis(Matrix_Ptr alfaBeta)
 {
-	EKIK wynik = (this->matrix->czyRemis()) ? Remis : Gramy;
-	if (this->czyjRuch() != Remis)
+	int temp = KolkoKrzyzyk::wielkosc;
+	for (int i = 0; i < KolkoKrzyzyk::wielkosc; i++)
 	{
-		EKratka wygral = this->matrix->ktoWygral();
-		if (wygral == XZnak)
-		{
-			wynik = GraczWygrywa;
-		}
-		if (wygral == OZnak)
-		{
-			wynik = KomputerWygrywa;
-		}
-		this->status = wynik;
+		temp = min(alfaBeta->liczRzedem(i, XZnak), temp);
+		temp = min(alfaBeta->liczRzedem(i, OZnak), temp);
+		temp = min(alfaBeta->liczKolumnowo(i, XZnak), temp);
+		temp = min(alfaBeta->liczKolumnowo(i, OZnak), temp);
+	}
+	temp = min(temp, alfaBeta->liczPoPrzekatnej1(XZnak));
+	temp = min(temp, alfaBeta->liczPoPrzekatnej1(OZnak));
+	temp = min(temp, alfaBeta->liczPoPrzekatnej2(XZnak));
+	temp = min(temp, alfaBeta->liczPoPrzekatnej2(OZnak));
+	return (temp != 0);
+}
+
+void KolkoKrzyzyk::zapamietajWynik(EKIK status)
+{
+	this->status = status;
+	this->wygral = Pusta;
+	if (this->status == GraczWygrywa)
+	{
+		this->wygral = XZnak;
+	}
+	if (this->status == KomputerWygrywa)
+	{
+		this->wygral = OZnak;
 	}
 }
 

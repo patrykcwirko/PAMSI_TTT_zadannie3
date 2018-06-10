@@ -13,8 +13,6 @@ class Matrix
 
 private:
 	int rozmiar;
-	int ruchyWyczerpane;
-	EKratka wygral;
 	Tablica_Ptr data;
 
 public:
@@ -29,20 +27,15 @@ public:
 	EKratka pobierz(int x, int y);
 	bool ustaw(int x, int y, EKratka kratka);
 
-	int indeks(int y, int x);
+	int indeks(int , int );
 	Pozycja_Ptr pozycja(int index);
 
 	bool czyWolne(Pozycja &poz);
-	bool czyKoniecGry();
-	bool czyRemis();
 	ListaPozycji_Ptr pobierzMozliweRuchy();
 	ListaKratek_Ptr pobierzDane();
-	Matrix_Ptr wykonajRuch(Pozycja &poz);
 	int liczRzedem(int row, EKratka player);
 	int liczKolumnowo(int column, EKratka player);
 	int liczPoPrzekatnej1(EKratka player);
 	int liczPoPrzekatnej2(EKratka player);
-	void ustawWygral(EKratka wygral);
-	EKratka ktoWygral();
 };
 
